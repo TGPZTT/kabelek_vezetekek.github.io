@@ -8,7 +8,7 @@
   var app = document.getElementById('app');
 
   /* ---------- ÁLLAPOT ---------- */
-  var S = { xp: 0, badges: [], flawless: false, maxStreak: 0, mod: {}, finalPassed: false, seen: {} };
+  var S = { xp: 0, badges: [], flawless: false, maxStreak: 0, mod: {}, finalPassed: false, seen: {}, freeMode: false };
   var streak = 0;
 
   function load() {
@@ -29,15 +29,15 @@
   function moduleComplete(mod) { return moduleAllChaptersDone(mod) && (!mod.quiz || ms(mod.id).quiz); }
   function moduleIndex(mId) { return C.modules.findIndex(function (m) { return m.id === mId; }); }
   function moduleUnlocked(idx) {
-    if (idx <= 0) return true;
+    if (S.freeMode || idx <= 0) return true;
     return moduleComplete(C.modules[idx - 1]);
   }
   function chapterUnlocked(mod, ci) {
-    if (ci <= 0) return true;
+    if (S.freeMode || ci <= 0) return true;
     return chapterComplete(mod.id, mod.chapters[ci - 1].id);
   }
-  function moduleQuizUnlocked(mod) { return moduleAllChaptersDone(mod); }
-  function finalUnlocked() { return C.modules.every(function (m) { return moduleComplete(m); }); }
+  function moduleQuizUnlocked(mod) { return S.freeMode || moduleAllChaptersDone(mod); }
+  function finalUnlocked() { return S.freeMode || C.modules.every(function (m) { return moduleComplete(m); }); }
 
   function totals() {
     var done = 0, total = 0;
@@ -50,59 +50,17 @@
   }
 
   /* ---------- XP / RANG ---------- */
-  function rankFor(xp) {
-    var r = C.ranks[0], idx = 0;
-    for (var i = 0; i < C.ranks.length; i++) if (xp >= C.ranks[i].xp) { r = C.ranks[i]; idx = i; }
-    var next = C.ranks[idx + 1] || null;
-    var base = r.xp, ceil = next ? next.xp : r.xp + 1;
-    var pct = next ? Math.min(100, Math.round(((xp - base) / (ceil - base)) * 100)) : 100;
-    return { level: idx + 1, name: r.name, pct: pct, next: next };
-  }
-  function awardXp(n, silent) {
-    if (!n) return;
-    var before = rankFor(S.xp).level;
-    S.xp += n; save(); updateHud();
-    if (!silent) toast(I('spark', 18) + ' +' + n + ' XP', false);
-    var after = rankFor(S.xp);
-    if (after.level > before) {
-      setTimeout(function () { toast(I('crown', 18) + ' Új rang: <b>' + after.name + '</b>!', true); confetti(); }, 500);
-    }
-  }
-  function hasBadge(id) { return S.badges.indexOf(id) >= 0; }
-  function awardBadge(id) {
-    if (hasBadge(id)) return;
-    var b = C.badges.concat(moduleBadges()).find(function (x) { return x.id === id; });
-    if (!b) return;
-    S.badges.push(id); save();
-    awardXp(C.xp.badge, true);
-    toast(I(b.icon || 'medal', 20) + ' Jelvény: <b>' + b.name + '</b>', true);
-    confetti();
-    updateHud();
-  }
-  function moduleBadges() { return C.modules.filter(function (m) { return m.badge; }).map(function (m) { return m.badge; }); }
-
-  function bumpStreak(ok) {
-    if (ok) { streak++; if (streak > S.maxStreak) S.maxStreak = streak; if (streak >= 6) awardBadge('streak'); }
-    else streak = 0;
-  }
+  // (Gamifikáció — rang / XP / jelvény — eltávolítva)
+  function awardXp() {}
+  function awardBadge() {}
+  function bumpStreak() {}
 
   /* ---------- HUD ---------- */
   function updateHud() {
-    var r = rankFor(S.xp);
-    document.getElementById('lvlNum').textContent = r.level;
-    document.getElementById('rankName').textContent = r.name;
-    document.getElementById('xpFill').style.width = r.pct + '%';
     var t = totals(); var pc = t.total ? Math.round((t.done / t.total) * 100) : 0;
-    document.getElementById('progPct').textContent = pc + '%';
-    document.getElementById('progBar').style.width = pc + '%';
-    document.getElementById('lvlRing').style.background =
-      'radial-gradient(closest-side, rgba(8,12,20,.95) 60%, transparent 62%), ' +
-      'conic-gradient(var(--gold) ' + r.pct + '%, rgba(255,255,255,.12) 0)';
-    // félúton jelvény
-    if (pc >= 50) awardBadgeQuiet('halfway');
-    if (C.modules.length && C.modules.every(function (m) { return moduleComplete(m); })) awardBadgeQuiet('scholar');
+    var pe = document.getElementById('progPct'); if (pe) pe.textContent = pc + '%';
+    var pb = document.getElementById('progBar'); if (pb) pb.style.width = pc + '%';
   }
-  function awardBadgeQuiet(id) { if (!hasBadge(id)) awardBadge(id); }
 
   /* =====================================================================
      ROUTER
@@ -133,13 +91,12 @@
       '<p class="page-sub" style="margin:0 auto">' + C.meta.subtitle + '</p>';
     wrap.appendChild(head);
 
-    var r = rankFor(S.xp);
+    var pcAll = t.total ? Math.round((t.done / t.total) * 100) : 0;
     var oc = el('div', 'overall-card');
     oc.innerHTML =
       stat(t.done + '/' + t.total, 'Teljesített rész') +
-      '<div class="divider"></div>' + stat(S.xp + '', 'Összes XP', 'gold') +
-      '<div class="divider"></div>' + stat(r.level + ' · ' + r.name, 'Rang', 'green') +
-      '<div class="divider"></div>' + stat(S.badges.length + '/' + (C.badges.length + moduleBadges().length), 'Jelvény');
+      '<div class="divider"></div>' + stat(pcAll + '%', 'Haladás', 'green') +
+      '<div class="divider"></div>' + stat(S.freeMode ? 'Szabad' : 'Tanuló', 'Mód', 'gold');
     wrap.appendChild(oc);
 
     var intro = el('div', 'center');
@@ -399,6 +356,13 @@
       case 'scenario': return Components.scenario(b, onDone);
       case 'flashcards': return Components.flashcards(b, onDone);
       case 'sort': return Components.sort(b, onDone);
+      case 'codebuilder': return Components.codebuilder(b, onDone);
+      case 'coloring': return Components.coloring(b, onDone);
+      case 'memory': return Components.memory(b, onDone);
+      case 'tree': return Components.tree(b, onDone);
+      case 'swipe': return Components.swipe(b, onDone);
+      case 'builder': return Components.builder(b, onDone);
+      case 'slider': return Components.slider(b, onDone);
       default: return html('<p>' + (b.html || '') + '</p>');
     }
   }
@@ -408,7 +372,10 @@
     var h = '<div class="tbl-wrap"><table class="data">';
     if (b.head) h += '<thead><tr>' + b.head.map(function (c) { return '<th>' + c + '</th>'; }).join('') + '</tr></thead>';
     h += '<tbody>' + b.rows.map(function (r) {
-      return '<tr>' + r.map(function (c) { return '<td>' + c + '</td>'; }).join('') + '</tr>';
+      return '<tr>' + r.map(function (c, ci) {
+        var lab = (b.head && b.head[ci]) ? String(b.head[ci]).replace(/<[^>]+>/g, '').replace(/"/g, '') : '';
+        return '<td data-label="' + lab + '">' + c + '</td>';
+      }).join('') + '</tr>';
     }).join('') + '</tbody></table></div>';
     var wrap = el('div');
     if (b.h) wrap.appendChild(html('<h3>' + b.h + '</h3>'));
@@ -613,22 +580,12 @@
         var cont = el('button', 'btn primary lg');
         cont.innerHTML = I('arrowR', 18) + ' Tovább';
         cont.addEventListener('click', function () { afterPass(scope, data); });
-        // XP
-        var gained = 0;
-        if (scope.kind === 'chapter') { var c = cs(scope.mId, scope.cId); if (!c.quiz) { c.quiz = true; gained = C.xp.chapterQuiz; } }
-        else if (scope.kind === 'module') { var m = ms(scope.mId); if (!m.quiz) { m.quiz = true; gained = C.xp.moduleQuiz; } }
-        else { if (!S.finalPassed) { S.finalPassed = true; gained = C.xp.finalExam; } }
+        // haladás rögzítése (gamifikáció nélkül)
+        if (scope.kind === 'chapter') { var c = cs(scope.mId, scope.cId); c.quiz = true; }
+        else if (scope.kind === 'module') { var m = ms(scope.mId); m.quiz = true; }
+        else { S.finalPassed = true; }
         save();
-        if (gained) {
-          res.appendChild(html('<div class="xp-pop">' + I('spark', 18) + ' +' + gained + ' XP' +
-            (firstTry ? ' &nbsp;·&nbsp; +' + C.xp.perfectBonus + ' hibátlan bónusz' : '') + '</div>'));
-          awardXp(gained, true); if (firstTry) { awardXp(C.xp.perfectBonus, true); S.flawless = true; awardBadge('flawless'); }
-          confetti();
-          // jelvények
-          if (scope.kind === 'chapter') awardBadge('first_step');
-          maybeModuleBadge(scope);
-          if (scope.kind === 'final') awardBadge('grandmaster');
-        }
+        confetti();
         act.appendChild(cont);
         var mapb = el('button', 'btn ghost'); mapb.innerHTML = I('map', 18) + ' Térkép';
         mapb.addEventListener('click', function () { go({ view: 'home' }); });
@@ -779,20 +736,28 @@
   }
 
   /* ---------- JELVÉNY-PANEL ---------- */
-  function showBadges() {
-    var all = C.badges.concat(moduleBadges());
-    var body = '<div class="badge-grid">' + all.map(function (b) {
-      var got = hasBadge(b.id);
-      return '<div class="badge ' + (got ? 'earned' : 'locked') + '"><div class="bi">' + I(got ? b.icon : 'lock', 30) + '</div>' +
-        '<b>' + b.name + '</b><span>' + b.desc + '</span></div>';
-    }).join('') + '</div>';
+  /* ---------- ÜDVÖZLŐ / MÓD-VÁLASZTÓ ---------- */
+  function showWelcome() {
     var mb = document.getElementById('modalBack'), m = document.getElementById('modal');
-    m.style.maxWidth = '560px';
-    m.innerHTML = '<h3>' + I('trophy', 22, 'style="vertical-align:-3px;color:var(--gold)"') + ' Jelvények (' +
-      S.badges.length + '/' + all.length + ')</h3>' + body +
-      '<div class="m-actions" style="margin-top:18px"><button class="btn primary" id="closeBadges">Bezár</button></div>';
+    m.style.maxWidth = '540px';
+    m.innerHTML =
+      '<div class="welcome">' +
+      '<div class="w-crest">' + I('atom', 42) + '</div>' +
+      '<h3>Hogyan szeretnél haladni?</h3>' +
+      '<p>Bármikor válthatsz — a fejléc <em>mód</em> gombjával vagy a bal oldali tartalomfában.</p>' +
+      '<div class="w-modes">' +
+      '<button class="w-mode' + (!S.freeMode ? ' cur' : '') + '" data-free="0"><span class="wm-ic">' + I('book', 26) + '</span><b>Tanulok</b><small>Sorban haladok; a kvíz nyitja a következő részt</small></button>' +
+      '<button class="w-mode' + (S.freeMode ? ' cur' : '') + '" data-free="1"><span class="wm-ic">' + I('compass', 26) + '</span><b>Csak nézelődök</b><small>Minden fel van oldva, szabadon ugrálok</small></button>' +
+      '</div></div>';
     mb.classList.add('show');
-    document.getElementById('closeBadges').onclick = function () { mb.classList.remove('show'); m.style.maxWidth = ''; };
+    Array.prototype.forEach.call(m.querySelectorAll('.w-mode'), function (btn) {
+      btn.addEventListener('click', function () {
+        S.freeMode = btn.dataset.free === '1'; save();
+        mb.classList.remove('show'); m.style.maxWidth = '';
+        if (route.view === 'home') render(); else go({ view: 'home' });
+        toast(S.freeMode ? (I('compass', 15) + ' Szabad mód — minden feloldva') : (I('book', 15) + ' Tanuló mód — sorban haladsz'));
+      });
+    });
     mb.onclick = function (e) { if (e.target === mb) { mb.classList.remove('show'); m.style.maxWidth = ''; } };
   }
 
@@ -841,6 +806,7 @@
   function navHTML() {
     var cur = route || {}, h = '';
     h += '<div class="nv-home' + (cur.view === 'home' ? ' cur' : '') + '" data-home="1">' + I('home', 16) + ' Térkép / áttekintés</div>';
+    h += '<div class="nv-free' + (S.freeMode ? ' on' : '') + '" data-free="1">' + I(S.freeMode ? 'lockOpen' : 'lock', 15) + ' <span>Szabad mód (minden feloldva)</span><b class="tg">' + (S.freeMode ? 'BE' : 'KI') + '</b></div>';
     C.modules.forEach(function (m, idx) {
       var unlocked = moduleUnlocked(idx), done = moduleComplete(m), active = unlocked && !done;
       var isCurMod = (cur.mId === m.id);
@@ -877,6 +843,7 @@
     document.body.appendChild(drawer);
     document.getElementById('navClose').addEventListener('click', function () { toggleNav(false); });
     drawer.addEventListener('click', function (e) {
+      if (e.target.closest('.nv-free')) { S.freeMode = !S.freeMode; save(); render(); toast(S.freeMode ? (I('lockOpen', 15) + ' Szabad mód BE — minden feloldva') : (I('lock', 15) + ' Szabad mód KI — sorrend visszaáll')); return; }
       if (e.target.closest('.nv-home')) { toggleNav(false); go({ view: 'home' }); return; }
       var chap = e.target.closest('.nv-chap'), mh = e.target.closest('.nv-mod-head');
       if (chap) {
@@ -897,15 +864,16 @@
   function init() {
     load();
     document.getElementById('sigil').innerHTML = I('atom', 26);
-    document.getElementById('badgesBtn').innerHTML = I('trophy', 20);
+    document.getElementById('modeBtn').innerHTML = I('compass', 20);
     document.getElementById('resetBtn').innerHTML = I('refresh', 20);
     document.getElementById('brandHome').addEventListener('click', function () { toggleNav(true); });
-    document.getElementById('badgesBtn').addEventListener('click', showBadges);
+    document.getElementById('modeBtn').addEventListener('click', showWelcome);
     document.getElementById('resetBtn').addEventListener('click', function () {
-      modal('Haladás visszaállítása', 'Biztosan törlöd az összes haladást, XP-t és jelvényt? Ez nem vonható vissza.',
+      modal('Haladás visszaállítása', 'Biztosan törlöd az összes haladást? Ez nem vonható vissza.',
         [{ label: 'Mégse' }, {
           label: 'Törlés', cls: 'gold', fn: function () {
-            S = { xp: 0, badges: [], flawless: false, maxStreak: 0, mod: {}, finalPassed: false, seen: {} };
+            var fm = S.freeMode;
+            S = { mod: {}, finalPassed: false, seen: {}, freeMode: fm };
             streak = 0; save(); go({ view: 'home' }); toast('Haladás visszaállítva.');
           }
         }]);
@@ -919,6 +887,7 @@
       return;
     }
     go({ view: 'home' });
+    showWelcome(); // üdvözlő mód-választó az oldal betöltésekor
   }
 
   // expose minimal API for components / debugging

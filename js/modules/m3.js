@@ -54,6 +54,22 @@ COURSE.addModule({
                 { left: 'NYM / MBCu (köpenyes)', right: 'Kábel — van külső köpeny' },
                 { left: 'NYY (földkábel)', right: 'Kábel — vastag köpeny, földbe is' }
               ]
+            },
+            { type: 'h3', text: 'Döntési fa — sorold be lépésről lépésre!' },
+            {
+              type: 'tree', gate: true,
+              intro: 'Válaszolj a kérdésekre, és eljutsz a helyes besoroláshoz. Próbáld ki több úton is!',
+              start: 'q1',
+              nodes: {
+                q1: { q: 'Van a vezető(k) köré húzott közös, külső réteg (köpeny) a szigetelésen felül?', options: [
+                  { label: 'Igen, van köpeny', go: 'q2' },
+                  { label: 'Nincs, csak az érszigetelés', result: 'VEZETÉK — köpeny nélkül, csak az érszigetelés (pl. MCu, MKH). Falba védőcső kell köré.' }
+                ] },
+                q2: { q: 'Vastag, teherbíró fekete köpeny, kifejezetten földbe/kültérre (0,6/1 kV)?', options: [
+                  { label: 'Igen, vastag fekete köpeny', result: 'FÖLDKÁBEL — pl. NYY / NAYY: a köpeny és a megfelelő fektetés miatt a földbe is mehet.' },
+                  { label: 'Nem, vékonyabb beltéri köpeny', result: 'KÁBEL (szerelvénykábel) — pl. NYM / MBCu: köpenyes, de beltéri felhasználásra.' }
+                ] }
+              }
             }
           ]
         }
@@ -70,7 +86,7 @@ COURSE.addModule({
         },
         {
           type: 'single', q: 'Miért nem mehet az MCu önmagában a falba?',
-          options: [{ t: 'Mert nincs köpenye — védőcső kell köré', correct: true }, { t: 'Mert alumínium' }, { t: 'Mert túl vastag' }, { t: 'Mert gyengeáramú' }],
+          options: [{ t: 'Mert nincs köpenye, védőcső kell köré', correct: true }, { t: 'Mert az alumínium ér nem bírja' }, { t: 'Mert túl merev a behúzáshoz' }, { t: 'Mert gyengeáramú vezeték' }],
           explain: 'Az MCu vezeték (egy szigetelőréteg), nincs mechanikai/nedvesség elleni köpenye, ezért védőcsőbe való.'
         }
       ]
@@ -105,12 +121,12 @@ COURSE.addModule({
               type: 'scenario', gate: true, h: 'Döntsd el a helyzeteket!',
               items: [
                 {
-                  q: 'Az erek körül egy közös külső burkolat (köpeny) fut. Szerkezetileg mi ez?',
+                  q: 'Egy terméken az erek köré egy közös, vastagabb külső réteget húztak (a szigetelésen felül). Szerkezetileg mi ez?',
                   ctx: '1. fogódzó: van-e közös külső burkolat az ereken?',
                   options: [
-                    { label: 'Kábel', sub: 'van köpeny', correct: true, why: 'Ha van közös burkolat (köpeny) az erek körül, az szerkezetileg kábel.' },
-                    { label: 'Vezeték', sub: 'nincs köpeny', why: 'A közös burkolat megléte épp a köpenyt jelzi → kábel.' },
-                    { label: 'Nem eldönthető', sub: '', why: 'De igen: a köpeny megléte eldönti — kábel.' }
+                    { label: 'Kábel', sub: '', correct: true, why: 'Az a közös külső réteg a KÖPENY — érszigetelés + köpeny → szerkezetileg kábel.' },
+                    { label: 'Vezeték', sub: '', why: 'A vezetéknek nincs külső közös rétege (köpenye), csak az érszigetelés. Itt van köpeny → kábel.' },
+                    { label: 'Nem dönthető el ennyiből', sub: '', why: 'De igen: a közös külső réteg (köpeny) megléte eldönti — kábel.' }
                   ]
                 },
                 {
@@ -133,7 +149,7 @@ COURSE.addModule({
       quiz: [
         {
           type: 'single', q: 'A GT szerkezetileg és szabvány szerint (VDE 0282) valójában:',
-          options: [{ t: 'gumikábel (gumi szigetelés + gumiköpeny)', correct: true }, { t: 'köpeny nélküli vezeték' }, { t: 'földkábel' }, { t: 'gyengeáramú jelkábel' }],
+          options: [{ t: 'gumikábel (gumi szigetelés + gumiköpeny)', correct: true }, { t: 'köpeny nélküli merev vezeték' }, { t: 'PVC szigetelésű földkábel' }, { t: 'vékony gyengeáramú jelkábel' }],
           explain: 'A GT finomsodrott rézvezető + gumi érszigetelés + gumiköpeny → szerkezetileg és hivatalosan is gumikábel. A neve vezet félre.'
         },
         {
@@ -148,10 +164,10 @@ COURSE.addModule({
         {
           type: 'single', q: 'Két gyakorlati fogódzó kérdés a besoroláshoz. Melyik az egyik?',
           options: [
-            { t: '„Van-e közös burkolat az erek körül (nem a vakolat)?”', correct: true },
-            { t: '„Hány fillérbe kerül méterenként?”' },
-            { t: '„Milyen színű a köpeny?”' },
-            { t: '„Hány éves a kábel?”' }
+            { t: '„Van-e közös külső burkolat (köpeny) az ereken?”', correct: true },
+            { t: '„Hány eret tartalmaz a termék?”' },
+            { t: '„Réz vagy alumínium a vezető anyaga?”' },
+            { t: '„Mekkora a névleges feszültsége?”' }
           ],
           explain: 'A két fogódzó: (1) van-e közös burkolat? → kábel; (2) mehet-e önállóan falba/földbe? Vezeték nem (cső kell), köpenyes kábel igen.'
         }
@@ -164,7 +180,7 @@ COURSE.addModule({
     { type: 'single', q: 'Mi a vezeték és kábel közti elhatárolás alapja (IEC 60050-461)?', options: [{ t: 'a külső köpeny megléte', correct: true }, { t: 'az érszám' }, { t: 'a vezető anyaga' }, { t: 'a gyártó' }], explain: 'A köpeny: egy réteg → vezeték, érszigetelés + köpeny → kábel.' },
     { type: 'tf', q: 'A GT a neve ellenére szerkezetileg és szabvány szerint is kábel.', answer: true, explain: 'GT = gumikábel (VDE 0282): gumi szigetelés + gumiköpeny.' },
     { type: 'single', q: 'Melyik valóban köpeny nélküli VEZETÉK?', options: [{ t: 'MCu', correct: true }, { t: 'NYM' }, { t: 'GT' }, { t: 'NYY' }], explain: 'Az MCu egy szigetelt ér köpeny nélkül. A többi köpenyes.' },
-    { type: 'single', q: 'Az MBCu a magyar neve ellenére valójában:', options: [{ t: 'köpenyes installációs kábel (NYM)', correct: true }, { t: 'köpeny nélküli vezeték' }, { t: 'gyengeáramú kábel' }, { t: 'alumínium földkábel' }], explain: 'MBCu = NYM, köpenyes installációs kábel — a szabvány is így kezeli.' },
+    { type: 'single', q: 'Az MBCu a magyar neve ellenére valójában:', options: [{ t: 'köpenyes installációs kábel (NYM)', correct: true }, { t: 'köpeny nélküli merev vezeték' }, { t: 'vékony gyengeáramú kábel' }, { t: 'alumínium erű földkábel' }], explain: 'MBCu = NYM, köpenyes installációs kábel — a szabvány is így kezeli.' },
     { type: 'single', q: 'Egy köpeny nélküli vezeték (pl. MKH) hogyan mehet vakolat alá?', options: [{ t: 'csak védőcsőben / csatornában', correct: true }, { t: 'közvetlenül, ahogy van' }, { t: 'homokágyban' }, { t: 'sehogy, tilos beltérben' }], explain: 'Köpeny nélküli vezetéknek védőcső vagy kábelcsatorna kell.' }
   ]
 });

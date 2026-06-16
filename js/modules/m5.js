@@ -4,9 +4,9 @@
 COURSE.addModule({
   id: 'm5',
   title: 'Kábelek',
-  subtitle: 'Teherbíró köpennyel: vakolat alá, falra, a földkábelek a földbe is. MM-fal, MBCu/NYM, NYY, NYCY, NAYY, NYCWY, SZAMKAM, SzRMKVM, vezérlőkábelek.',
+  subtitle: 'Teherbíró köpennyel — típustól függően falon kívül, vakolat alá vagy a földbe. MM-fal, MBCu/NYM, NYY, NYCY, NAYY, NYCWY, SZAMKAM, SzRMKVM, vezérlőkábelek.',
   icon: 'layers',
-  intro: 'Ezeknél már van teherbíró külső köpeny: mehetnek vakolat alá, falon kívülre, a földkábelek pedig a földbe is. Sorra vesszük a falba valókat, a föld- és betápkábeleket, az árnyékolt/páncélos típusokat és a vezérlőkábeleket.',
+  intro: 'Ezeknél már van teherbíró külső köpeny, ezért a védelmükhöz nem kell külön védőcső. Hogy hova fektethetők (falon kívül, vakolat alá, kültér, föld), az típusonként változó — sorra vesszük a falba valókat, a föld- és betápkábeleket, az árnyékolt/páncélos típusokat és a vezérlőkábeleket.',
   badge: { id: 'm5', name: 'A Kábelek Mestere', desc: 'Végigvetted a kábeleket és köpenyes vezetékeket.', icon: 'layers' },
 
   chapters: [
@@ -28,7 +28,7 @@ COURSE.addModule({
               type: 'spec', h: 'Műszaki adatlap',
               rows: [
                 ['Magyar név', 'MM-fal / MMCu — dupla műanyag szigetelésű, falba helyezhető <strong>lapos kábel</strong> (a külső fehér réteg a köpeny → ezért kábel, nem vezeték)'],
-                ['Szabványos megfelelő', 'YDYt / YDYtzo / YMSteg-J / NYIFY jellegű lapos falvezeték · 300/500 V'],
+                ['Szabványos megfelelő', 'YDYt / YDYtzo / YMSteg-J / NYIFY jellegű lapos installációs (fal)kábel · 300/500 V'],
                 ['Felépítés', '2–3 tömör réz ér egymás mellett, PVC érszigetelés + vékony fehér PVC külső réteg → lapos szalagforma; 3 eresnél a zöld-sárga PE kissé távolabb fut, hogy a rögzítőszeg ne sértse'],
                 ['Hol használjuk', 'vakolat alá <strong>védőcső nélkül</strong>, falazatba/betonba ágyazva (vibrált/csömöszölt beton kivétel); panel- és betonfalas épületek kedvelt vezetéke, mert sekély horony is elég; 2×1,5 / 3×1,5 / 3×2,5'],
                 ['Extra infó', '<strong>Kültéren és FÖLDBEN NEM használható!</strong> Színe jellemzően fehér. Hátránya: beépítve csak bontással javítható — új munkánál sokan a védőcső + MCu megoldást ajánlják. Hidegben a PVC törékeny — fektetés +5 °C felett.'],
@@ -60,16 +60,16 @@ COURSE.addModule({
         }
       ],
       quiz: [
-        { type: 'single', q: 'Milyen formájú és színű az MM-fal?', options: [{ t: 'lapos, fehér', correct: true }, { t: 'kör, szürke' }, { t: 'kör, fekete' }, { t: 'lapos, fekete' }], explain: 'MM-fal = LAPOS, fehér. (Az MBCu KÖR, szürke.)' },
+        { type: 'single', q: 'Milyen formájú és színű az MM-fal?', options: [{ t: 'lapos, fehér', correct: true }, { t: 'kör, világosszürke' }, { t: 'kör, fekete' }, { t: 'lapos, fekete' }], explain: 'MM-fal = LAPOS, fehér. (Az MBCu KÖR, világosszürke.)' },
         { type: 'tf', q: 'Az MM-fal földbe és kültérre is használható.', answer: false, explain: 'Nem! Kültéren és földben NEM használható — csak vakolat alá, beltér.' },
-        { type: 'single', q: 'Miért kedvelt panel/betonfalon?', options: [{ t: 'mert lapos, így sekély horony is elég', correct: true }, { t: 'mert földbe is mehet' }, { t: 'mert nagyon hőálló' }, { t: 'mert árnyékolt' }], explain: 'A lapos szalagforma miatt sekély horonyba is befér.' }
+        { type: 'single', q: 'Miért kedvelt panel/betonfalon?', options: [{ t: 'mert lapos, így sekély horony is elég', correct: true }, { t: 'mert közvetlenül földbe is fektethető' }, { t: 'mert kifejezetten hőálló kivitelű' }, { t: 'mert fémárnyékolása is van' }], explain: 'A lapos szalagforma miatt sekély horonyba is befér.' }
       ]
     },
 
     /* ---------------- 5.2 MBCu = NYM-J ---------------- */
     {
       id: 'c2', code: '5.2', title: 'MBCu = NYM-J — a KÖR szerelvénykábel',
-      blurb: 'A leggyakoribb szerelvénykábel: kör, szürke. Vakolat alá ÉS falon kívül, nedves beltér is. 5 eres: sütő, főzőlap, motor.',
+      blurb: 'A leggyakoribb szerelvénykábel: kör, világosszürke. Vakolat alá ÉS falon kívül, nedves beltér is. 5 eres: sütő, főzőlap, motor.',
       pages: [
         {
           kicker: '5.2 · MBCu (NYM-J)',
@@ -100,7 +100,7 @@ COURSE.addModule({
               type: 'xsec', gate: true, img: 'images/mbcu.png',
               intro: 'Az MBCu keresztmetszete. Kattints sorban minden rétegre — mind az ötöt fel kell fedezned.',
               layers: [
-                { name: 'Szürke PVC köpeny (RAL 7001)', desc: 'A külső védőköpeny — ettől kábel. Mehet vakolat alá és falra.', color: '#9aa1a8', hot: { x: 50, y: 7, r: 6 } },
+                { name: 'Világosszürke PVC köpeny (RAL 7035)', desc: 'A külső védőköpeny — ettől kábel. Falon kívül és vakolat alá is használják.', color: '#cbd0cc', hot: { x: 50, y: 7, r: 6 } },
                 { name: 'Kitöltőanyag / övréteg', desc: 'A köpeny alatt kitölti az erek közti hézagot, kör formát ad.', color: '#e9e3d4', hot: { x: 26, y: 30, r: 6 } },
                 { name: 'Barna ér — fázis', desc: 'Tömör réz vezető + barna PVC szigetelés (L).', color: '#6f421f', hot: { x: 50, y: 30, r: 8 } },
                 { name: 'Kék ér — nulla (N)', desc: 'A nullavezető — kék szigetelés.', color: '#1f6fd0', hot: { x: 33, y: 61, r: 8 } },
@@ -120,15 +120,26 @@ COURSE.addModule({
                   { label: 'Köpeny nélküli vezeték, ezért cső kell falba', why: 'Nem: az MBCu köpenyes (= kábel), a köpeny adja a védelmet.' }
                 ]
               }]
+            },
+            { type: 'h3', text: 'Építsd fel az MBCu (NYM-J) keresztmetszetét — belülről kifelé!' },
+            {
+              type: 'builder', gate: true,
+              intro: 'Koppints a rétegekre a helyes sorrendben, a vezetőtől a köpenyig. Minden helyes lépésnél nő a kábel.',
+              layers: [
+                { name: 'réz vezető', css: '#c8772f' },
+                { name: 'PVC érszigetelés', css: '#6f421f' },
+                { name: 'kitöltőanyag / övréteg', css: '#e9e3d4' },
+                { name: 'világosszürke PVC köpeny', css: '#cbd0cc' }
+              ]
             }
           ]
         }
       ],
       quiz: [
-        { type: 'single', q: 'MBCu = ? és milyen a formája/színe?', options: [{ t: 'NYM-J — kör, szürke', correct: true }, { t: 'YDYt — lapos, fehér' }, { t: 'NYY — kör, fekete' }, { t: 'NAYY — alu' }], explain: 'MBCu = NYM-J, KÖR keresztmetszetű, szürke (RAL 7001) köpeny.' },
+        { type: 'single', q: 'MBCu = ? és milyen a formája/színe?', options: [{ t: 'NYM-J — kör, világosszürke', correct: true }, { t: 'YDYt — lapos, fehér' }, { t: 'NYY — kör, fekete' }, { t: 'NAYY — alu' }], explain: 'MBCu = NYM-J, KÖR keresztmetszetű, világosszürke (RAL 7035) köpeny.' },
         { type: 'single', q: 'Hogyan mehet az MBCu a földbe?', options: [{ t: 'csak védőcsőben', correct: true }, { t: 'közvetlenül, homokágyba' }, { t: 'sehogy' }, { t: 'jelzőszalaggal, cső nélkül' }], explain: 'Beltéri kábel; földbe csak védőcsőben, kültéren napfénytől védve.' },
         { type: 'single', q: 'Mit jelent a -J az NYM-J-ben?', options: [{ t: 'van zöld-sárga védőér', correct: true }, { t: 'nincs védőér' }, { t: 'alumínium' }, { t: 'lapos' }], explain: 'NYM-J = van zöld-sárga, NYM-O = nincs.' },
-        { type: 'single', q: 'Mire való az 5 eres NYM-J?', options: [{ t: 'sütő, főzőlap, motor fix bekötés, mellékelosztó (3 fázis + N + PE)', correct: true }, { t: 'csengő bekötése' }, { t: 'antenna' }, { t: 'kerti földkábel' }], explain: '5 ér = 3 fázis + nulla + védő — háromfázisú fogyasztók fix bekötése.' }
+        { type: 'single', q: 'Mire való az 5 eres NYM-J?', options: [{ t: 'sütő, főzőlap, motor fix bekötése', correct: true }, { t: 'csengő és kaputelefon jelei' }, { t: 'antenna és koax jel' }, { t: 'kerti földkábel-fektetés' }], explain: '5 ér = 3 fázis + nulla + védő → háromfázisú fogyasztók (sütő, főzőlap, motor) fix bekötése.' }
       ]
     },
 
@@ -181,7 +192,7 @@ COURSE.addModule({
         }
       ],
       quiz: [
-        { type: 'single', q: 'Milyen mélyre fektetjük az NYY földkábelt?', options: [{ t: '~70–80 cm, homokágyba, jelzőszalaggal', correct: true }, { t: '10 cm-re a felszín alá' }, { t: 'a felszínre' }, { t: '3 m mélyre' }], explain: 'Kb. 70–80 cm mély, homokágy + jelzőszalag.' },
+        { type: 'single', q: 'Milyen mélyre fektetjük az NYY földkábelt?', options: [{ t: '~70–80 cm, homokágyba, jelzőszalaggal', correct: true }, { t: '~10 cm-re, közvetlenül a földbe' }, { t: 'a felszínre, takarás nélkül' }, { t: 'kb. 3 méter mélyre, betonba' }], explain: 'Kb. 70–80 cm mély, homokágy + jelzőszalag.' },
         { type: 'single', q: 'Mi az NYY névleges feszültsége?', options: [{ t: '0,6/1 kV', correct: true }, { t: '300/500 V' }, { t: '450/750 V' }, { t: '300/300 V' }], explain: 'A földkábelek (NYY, NAYY) 0,6/1 kV-osak.' },
         { type: 'tf', q: 'Az NYY-J tartalmaz zöld-sárga védőeret.', answer: true, explain: 'Igen, -J = van zöld-sárga; -O = nincs.' }
       ]
@@ -231,7 +242,7 @@ COURSE.addModule({
       ],
       quiz: [
         { type: 'single', q: 'Mikor választanál NYCY-t a sima NYY földkábel helyett?', options: [{ t: 'ha árnyékolás / védő(PEN)-funkció is kell', correct: true }, { t: 'ha olcsóbb megoldás kell' }, { t: 'ha lapos kábel kell' }, { t: 'ha hőállóság kell +110 °C-ig' }], explain: 'Az NYCY koncentrikus rézrétege árnyékolást és PEN-funkciót ad — ezért választod, ha ez is követelmény. Egyébként a sima NYY elég és olcsóbb.' },
-        { type: 'single', q: 'Mi a különbség az NYCY és az NYCWY között?', options: [{ t: 'NYCWY-nál a koncentrikus vezető hullámos (W=wellig), NYCY-nál egyenletes', correct: true }, { t: 'NYCY alumínium, NYCWY réz' }, { t: 'semmi' }, { t: 'NYCY beltéri, NYCWY gyengeáram' }], explain: 'A W = wellig (hullámos) fektetést jelöl az NYCWY-nál.' }
+        { type: 'single', q: 'Mi a különbség az NYCY és az NYCWY között?', options: [{ t: 'a koncentrikus vezető: NYCWY-nál hullámos, NYCY-nál egyenletes', correct: true }, { t: 'NYCY alumínium, NYCWY réz erű' }, { t: 'semmi, csak a gyártó más' }, { t: 'NYCY beltéri, NYCWY gyengeáramú' }], explain: 'A W = wellig (hullámos) fektetést jelöl az NYCWY-nál.' }
       ]
     },
 
@@ -285,7 +296,7 @@ COURSE.addModule({
       ],
       quiz: [
         { type: 'single', q: 'Mi a tipikus háztartási alu betápkábel?', options: [{ t: 'NAYY-J 4×16', correct: true }, { t: 'NYM-J 3×1,5' }, { t: 'H05VV-F 3G1,5' }, { t: 'YSLY 4×0,75' }], explain: 'A klasszikus betáp NAYY-J 4×16 (nagyobb teljesítményhez 4×25).' },
-        { type: 'single', q: 'Mit kell tenni az alumíniumkötésekkel idővel?', options: [{ t: 'utánhúzni (mert az alu kúszik)', correct: true }, { t: 'lefesteni' }, { t: 'semmit' }, { t: 'hűteni' }], explain: 'Az alu kúszik, ezért a kötéseket után kell húzni; réz–alu átmenethez bimetall saru kell.' },
+        { type: 'single', q: 'Mit kell tenni az alumíniumkötésekkel idővel?', options: [{ t: 'utánhúzni (mert az alu kúszik)', correct: true }, { t: 'rendszeresen átfesteni őket' }, { t: 'nem kell velük semmit tenni' }, { t: 'folyamatosan hűteni a kötést' }], explain: 'Az alu kúszik, ezért a kötéseket után kell húzni; réz–alu átmenethez bimetall saru kell.' },
         { type: 'tf', q: 'Háztartási betápnál az alumínium minimum keresztmetszete 16 mm².', answer: true, explain: 'Igen, az alu betáp minimum 16 mm².' }
       ]
     },
@@ -348,8 +359,8 @@ COURSE.addModule({
       ],
       quiz: [
         { type: 'single', q: 'Mire való az NYCWY?', options: [{ t: 'méretlen fővezeték a mérőig (betáp)', correct: true }, { t: 'beltéri világítási kör' }, { t: 'csengő bekötése' }, { t: 'kültéri hosszabbító' }], explain: 'A csatlakozási ponttól a fogyasztásmérőig vezető méretlen fővezeték — gyakran a szolgáltató írja elő.' },
-        { type: 'single', q: 'Mit jelez a W az NYCWY-ban?', options: [{ t: 'hullámosan (wellig) fektetett koncentrikus vezetőt', correct: true }, { t: 'fehér színt' }, { t: 'vízállóságot' }, { t: 'kétszeres feszültséget' }], explain: 'W = wellig = hullámos. Az NYCY-nál egyenletes a koncentrikus vezető.' },
-        { type: 'single', q: 'NYCWY 3×25/16 — a /16 jelentése:', options: [{ t: 'a koncentrikus vezető keresztmetszete (16 mm²)', correct: true }, { t: 'a kábel átmérője' }, { t: '16 ér' }, { t: 'a feszültség' }], explain: 'A / utáni szám a koncentrikus vezető keresztmetszete.' }
+        { type: 'single', q: 'Mit jelez a W az NYCWY-ban?', options: [{ t: 'hullámosan fektetett koncentrikus vezetőt', correct: true }, { t: 'fehér köpenyszínt' }, { t: 'fokozott vízállóságot' }, { t: 'kétszeres névleges feszültséget' }], explain: 'W = wellig = hullámos. Az NYCY-nál egyenletes a koncentrikus vezető.' },
+        { type: 'single', q: 'NYCWY 3×25/16 — a /16 jelentése:', options: [{ t: 'a koncentrikus vezető keresztmetszete (16 mm²)', correct: true }, { t: 'a kábel külső átmérője mm-ben' }, { t: 'az erek száma (16 db)' }, { t: 'a névleges feszültség értéke' }], explain: 'A / utáni szám a koncentrikus vezető keresztmetszete.' }
       ]
     },
 
@@ -562,15 +573,15 @@ COURSE.addModule({
       quiz: [
         { type: 'tf', q: 'A gyengeáramú csengő-jelkábel beköthető a 230 V-os hálózatba.', answer: false, explain: 'TILOS! A vékony gyengeáramú jelkábel nem való 230 V-ra.' },
         { type: 'single', q: 'Melyik kábel halogénmentes (tűznél nincs mérgező gáz)?', options: [{ t: 'NHXMH', correct: true }, { t: 'NYM' }, { t: 'NYY' }, { t: 'H05VV-F' }], explain: 'Az NHXMH halogénmentes NYM — középületek, menekülési útvonalak.' },
-        { type: 'single', q: 'Mire húznak ma gyakran UTP-t a háznál?', options: [{ t: 'hálózat, kamera, kaputelefon', correct: true }, { t: 'sütő bekötés' }, { t: 'földkábel' }, { t: 'fűtőtest' }], explain: 'UTP: hálózat, kamera, és ma gyakran a kaputelefon is — erősáramtól külön nyomvonalon.' }
+        { type: 'single', q: 'Mire húznak ma gyakran UTP-t a háznál?', options: [{ t: 'hálózat, kamera, kaputelefon', correct: true }, { t: 'sütő és főzőlap bekötése' }, { t: 'kerti földkábel-fektetés' }, { t: 'fűtőtest tápellátása' }], explain: 'UTP: hálózat, kamera, és ma gyakran a kaputelefon is — erősáramtól külön nyomvonalon.' }
       ]
     }
   ],
 
   /* ---------------- MODULKVÍZ ---------------- */
   quiz: [
-    { type: 'single', q: 'Lapos, fehér, vakolat alá, cső nélkül:', options: [{ t: 'MM-fal (MMCu)', correct: true }, { t: 'MBCu' }, { t: 'NYY' }, { t: 'NAYY' }], explain: 'MM-fal = lapos, fehér falvezeték.' },
-    { type: 'single', q: 'A leggyakoribb beltéri szerelvénykábel (kör, szürke):', options: [{ t: 'MBCu = NYM-J', correct: true }, { t: 'MM-fal' }, { t: 'NYCWY' }, { t: 'YSLY' }], explain: 'MBCu = NYM-J, kör, szürke.' },
+    { type: 'single', q: 'Vakolat alá, VÉDŐCSŐ NÉLKÜL, lapos kivitelben kifejezetten melyiket tervezték?', options: [{ t: 'MM-fal (MMCu)', correct: true }, { t: 'MBCu (NYM)' }, { t: 'NYY' }, { t: 'MCu' }], explain: 'Cső nélkül vakolat alá az MM-fal (lapos, fehér falkábel) való; az MCu csak csőben, az NYM inkább falon kívül/csatornában, az NYY a földbe.' },
+    { type: 'single', q: 'A leggyakoribb beltéri szerelvénykábel (kör, világosszürke):', options: [{ t: 'MBCu = NYM-J', correct: true }, { t: 'MM-fal' }, { t: 'NYCWY' }, { t: 'YSLY' }], explain: 'MBCu = NYM-J, kör, világosszürke.' },
     { type: 'single', q: 'Kertbe, földbe, kapumotorhoz tartós tápkábel:', options: [{ t: 'NYY-J', correct: true }, { t: 'MT' }, { t: 'MM-fal' }, { t: 'YSLY' }], explain: 'NYY réz földkábel — 70–80 cm mély, homokágy + jelzőszalag.' },
     { type: 'single', q: 'Családi ház betáp az utcáról a mérőig (olcsó, alu):', options: [{ t: 'NAYY-J 4×16', correct: true }, { t: 'NYM-J 3×1,5' }, { t: 'YSLCY' }, { t: 'H07G' }], explain: 'NAYY alumínium betápkábel.' },
     { type: 'single', q: 'Méretlen fővezeték hullámos koncentrikus vezetővel:', options: [{ t: 'NYCWY', correct: true }, { t: 'NYCY' }, { t: 'SZAMKAM' }, { t: 'MBCu' }], explain: 'NYCWY — W = wellig (hullámos) koncentrikus vezető.' },

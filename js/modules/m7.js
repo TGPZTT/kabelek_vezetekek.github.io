@@ -32,6 +32,18 @@ COURSE.addModule({
                 ['25 mm²', '~84–101 A', '80 A', 'nagyobb betáplálások']
               ]
             },
+            { type: 'p', text: '<div style="background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0">' +
+              '<div style="font-weight:600;color:#eaf1ff;margin-bottom:10px">Terhelhetőség a keresztmetszet függvényében (réz, tájékoztató):</div>' +
+              '<svg viewBox="0 0 470 218" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">' +
+              '<text x="6" y="23" fill="#dceafb" font-size="12">1,5 mm²</text><rect x="70" y="11" width="53" height="16" rx="4" fill="#37d6ec"/><text x="129" y="23" fill="#9fb0cc" font-size="11">~16 A</text>' +
+              '<text x="6" y="51" fill="#dceafb" font-size="12">2,5 mm²</text><rect x="70" y="39" width="73" height="16" rx="4" fill="#37d6ec"/><text x="149" y="51" fill="#9fb0cc" font-size="11">~22 A</text>' +
+              '<text x="6" y="79" fill="#dceafb" font-size="12">4 mm²</text><rect x="70" y="67" width="99" height="16" rx="4" fill="#3fd8c0"/><text x="175" y="79" fill="#9fb0cc" font-size="11">~30 A</text>' +
+              '<text x="6" y="107" fill="#dceafb" font-size="12">6 mm²</text><rect x="70" y="95" width="125" height="16" rx="4" fill="#54e6a0"/><text x="201" y="107" fill="#9fb0cc" font-size="11">~38 A</text>' +
+              '<text x="6" y="135" fill="#dceafb" font-size="12">10 mm²</text><rect x="70" y="123" width="175" height="16" rx="4" fill="#8fe06a"/><text x="251" y="135" fill="#9fb0cc" font-size="11">~53 A</text>' +
+              '<text x="6" y="163" fill="#dceafb" font-size="12">16 mm²</text><rect x="70" y="151" width="231" height="16" rx="4" fill="#f0c84b"/><text x="307" y="163" fill="#9fb0cc" font-size="11">~70 A</text>' +
+              '<text x="6" y="191" fill="#dceafb" font-size="12">25 mm²</text><rect x="70" y="179" width="304" height="16" rx="4" fill="#f0a233"/><text x="380" y="191" fill="#9fb0cc" font-size="11">~92 A</text>' +
+              '</svg>' +
+              '<div style="font-size:.82rem;color:var(--ink-soft);margin-top:6px">Jól látszik: a keresztmetszet növelésével nő a terhelhetőség (de nem lineárisan — a felület számít).</div></div>' },
             {
               type: 'callout', variant: 'danger', title: 'Az aranyszabály',
               html: 'A vezetéket <strong>mindig a kismegszakító védi</strong> — a megszakító névleges árama NEM lehet nagyobb, mint amit a vezeték elbír! Fordított esetben a vezeték melegedhet/éghet, mielőtt a megszakító lekapcsol.'
@@ -77,13 +89,24 @@ COURSE.addModule({
                   ]
                 }
               ]
+            },
+            { type: 'h3', text: 'Méretező csúszka — állítsd be a helyes keresztmetszetet!' },
+            {
+              type: 'slider', gate: true,
+              intro: 'Húzd a csúszkát, és figyeld a visszajelzést: túl kicsi (tűzveszély), megfelelő, vagy túlméretezett. Oldd meg mind a hármat!',
+              steps: [{ label: '1,5 mm²' }, { label: '2,5 mm²' }, { label: '4 mm²' }, { label: '6 mm²' }, { label: '10 mm²' }, { label: '16 mm²' }],
+              items: [
+                { prompt: 'Világítási kör, 10 A kismegszakító — melyik réz keresztmetszet?', correct: 0 },
+                { prompt: 'Dugaljkör, 16 A — melyik réz keresztmetszet?', correct: 1 },
+                { prompt: 'Sütő + főzőlap, 32 A — melyik réz keresztmetszet?', correct: 3 }
+              ]
             }
           ]
         }
       ],
       quiz: [
         { type: 'single', q: 'Mekkora réz keresztmetszet való egy 16 A-es dugaljkörhöz?', options: [{ t: '2,5 mm²', correct: true }, { t: '1,5 mm²' }, { t: '0,75 mm²' }, { t: '10 mm²' }], explain: '2,5 mm² réz ~21–24 A-t bír — ez a 16 A-es dugaljkör szabványos mérete.' },
-        { type: 'single', q: 'Mi a kismegszakító feladata a vezetékkel kapcsolatban?', options: [{ t: 'megvédi a vezetéket a túlterheléstől (árama ≤ a vezeték terhelhetősége)', correct: true }, { t: 'növeli a vezeték terhelhetőségét' }, { t: 'csökkenti a feszültséget' }, { t: 'semmi köze a vezetékhez' }], explain: 'A megszakító névleges árama nem lehet nagyobb, mint amit a vezeték elbír — különben a vezeték éghet.' },
+        { type: 'single', q: 'Mi a kismegszakító feladata a vezetékkel kapcsolatban?', options: [{ t: 'megvédi a vezetéket a túlterheléstől', correct: true }, { t: 'megnöveli a vezeték terhelhetőségét' }, { t: 'csökkenti a hálózati feszültséget' }, { t: 'nincs köze a vezeték méretéhez' }], explain: 'A megszakító névleges árama nem lehet nagyobb, mint amit a vezeték elbír — különben a vezeték éghet.' },
         { type: 'single', q: 'Sütő + főzőlap 32 A-es köre — milyen réz keresztmetszet?', options: [{ t: '6 mm²', correct: true }, { t: '2,5 mm²' }, { t: '1,5 mm²' }, { t: '0,5 mm²' }], explain: '6 mm² réz ~36–41 A — a 32 A-es körhöz ez kell.' },
         { type: 'tf', q: '20–25 m feletti hossznál a feszültségesés miatt érdemes nagyobb keresztmetszetet választani.', answer: true, explain: 'Igen, a hosszú vezetéken eső feszültség miatt egy mérettel feljebb.' }
       ]

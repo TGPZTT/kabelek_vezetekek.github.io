@@ -31,7 +31,7 @@ COURSE.addModule({
             },
             {
               type: 'callout', variant: 'rule', title: 'KÁBEL (és köpenyes vezeték)',
-              html: 'Egy vagy több szigetelt ér egy <strong>közös, vastagabb külső köpenyben</strong>, gyakran kitöltőanyaggal. A köpeny véd a mechanikai sérülés és a nedvesség ellen — ezért mehet vakolat alá, falon kívülre, sőt a földkábel a földbe is. Pl. <code>NYM</code>, <code>NYY</code>, <code>MBCu</code>.'
+              html: 'Egy vagy több szigetelt ér egy <strong>közös, vastagabb külső köpenyben</strong>, gyakran kitöltőanyaggal. A köpeny véd a mechanikai sérülés és a nedvesség ellen, ezért a kábelnek a védelméhez <strong>nem kell külön védőcső</strong>. Hogy pontosan hova fektethető (falon kívül, vakolat alá, kültér, föld), az <strong>típusonként más</strong> — pl. földbe csak a földkábel (NYY/NAYY) való, vakolat alá cső nélkül az MM-fal. Pl. <code>NYM</code>, <code>NYY</code>, <code>MBCu</code>.'
             }
           ]
         },
@@ -56,7 +56,7 @@ COURSE.addModule({
               type: 'match', gate: true, leftLabel: 'Fogalom', rightLabel: 'Jelentése',
               pairs: [
                 { left: 'Vezeték', right: '1 szigetelt ér, köpeny nélkül → csőbe, csatornába' },
-                { left: 'Kábel', right: 'erek + köpeny → vakolat alá, falra, földbe' },
+                { left: 'Kábel', right: 'erek + köpeny → nem kell védőcső (hova fektethető: típusfüggő)' },
                 { left: 'Ér', right: 'a vezető + a rá húzott érszigetelés' },
                 { left: 'Köpeny', right: 'közös külső védőréteg az erek körül' }
               ]
@@ -86,8 +86,8 @@ COURSE.addModule({
           explain: 'A választóvonal a köpeny: egyetlen szigetelőréteg (érszigetelés) → vezeték; érszigetelés + külső köpeny → kábel. Az érszám NEM dönt.'
         },
         {
-          type: 'tf', q: 'A köpenyes kábel (pl. NYM) önmagában, védőcső nélkül is mehet vakolat alá.', answer: true,
-          explain: 'Igen — épp a köpeny adja a mechanikai és nedvesség elleni védelmet, ezért mehet vakolat alá, falra, sőt a földkábel a földbe is. A köpeny nélküli vezetéknek viszont védőcső kell.'
+          type: 'tf', q: 'A köpenyes kábelnek a köpeny ad mechanikai és nedvesség elleni védelmet, ezért a védelméhez nincs szüksége külön védőcsőre.', answer: true,
+          explain: 'Igen — a köpeny maga véd. Hogy konkrétan hova fektethető (vakolat alá, kültér, föld), az viszont típusonként eltér: pl. földbe csak a földkábel (NYY/NAYY) való, vakolat alá cső nélkül az MM-fal.'
         },
         {
           type: 'single', q: 'Egy szigetelt rézszál, külső köpeny nélkül (pl. MCu). Ez:',
@@ -112,12 +112,12 @@ COURSE.addModule({
         {
           type: 'single', q: 'Miért hívja a köznyelv „kábelnek” az MBCu-t és az NYM-et?',
           options: [
-            { t: 'Mert köpenyes szerelvényvezetékek, és a katalógusok is keverve használják', correct: true },
-            { t: 'Mert alumíniumból készülnek' },
-            { t: 'Mert mindig a földbe kerülnek' },
-            { t: 'Mert nincs bennük védővezető' }
+            { t: 'Mert van köpenyük, így szerkezetileg kábelszerűek', correct: true },
+            { t: 'Mert alumínium vezetőből készülnek, mint a földkábelek' },
+            { t: 'Mert mindig közvetlenül a földbe fektetik őket' },
+            { t: 'Mert nincs bennük zöld-sárga védővezető' }
           ],
-          explain: 'A köpeny miatt szerkezetileg kábelszerűek, így a hétköznapi és kereskedői szóhasználat „kábelnek” nevezi őket — ez elfogadott.'
+          explain: 'A köpeny miatt szerkezetileg kábelszerűek, így a köznyelv és a katalógusok is „kábelnek” hívják őket.'
         }
       ]
     },
@@ -140,7 +140,20 @@ COURSE.addModule({
                 ['Hajlékony / finomsodrott (5–6. osztály)', '<code>-K</code>, <code>-F</code>', 'sok vékony elemi szálból sodorva — nagyon hajlékony', 'MKH, MT, gumikábel — mozgó, hajlítgatott helyek']
               ],
               note: 'A „tömör” = <strong>egyhuzalú</strong> (egyetlen elemi szál); minden más több elemi szálból sodort. A <code>re</code> = kör tömör, <code>rm</code> = kör sodrott ér (a VDE-jelölésnél is előjön).'
-            }
+            },
+            { type: 'p', text: '<div style="background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:14px;padding:14px;margin:8px 0">' +
+              '<div style="font-weight:600;color:#eaf1ff;margin-bottom:8px">Így néz ki a három kialakítás keresztmetszete (az elemi szálak száma a különbség):</div>' +
+              '<svg viewBox="0 0 470 165" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">' +
+              '<circle cx="80" cy="62" r="33" fill="none" stroke="#6f421f" stroke-width="9"/><circle cx="80" cy="62" r="25" fill="#c8772f" stroke="#a85f24" stroke-width="1.5"/>' +
+              '<text x="80" y="125" fill="#dceafb" font-size="13" text-anchor="middle" font-weight="700">Tömör (-U)</text><text x="80" y="143" fill="#7e8eac" font-size="10.5" text-anchor="middle">1 elemi szál</text>' +
+              '<g fill="#c8772f" stroke="#a85f24" stroke-width="1"><circle cx="235" cy="62" r="33" fill="none" stroke="#6f421f" stroke-width="9"/>' +
+              '<circle cx="235" cy="62" r="9"/><circle cx="253" cy="62" r="9"/><circle cx="217" cy="62" r="9"/><circle cx="244" cy="46" r="9"/><circle cx="226" cy="46" r="9"/><circle cx="244" cy="78" r="9"/><circle cx="226" cy="78" r="9"/></g>' +
+              '<text x="235" y="125" fill="#dceafb" font-size="13" text-anchor="middle" font-weight="700">Sodrott (-R)</text><text x="235" y="143" fill="#7e8eac" font-size="10.5" text-anchor="middle">kevés elemi szál</text>' +
+              '<g fill="#e0a766" stroke="#a85f24" stroke-width="0.5"><circle cx="390" cy="62" r="33" fill="none" stroke="#6f421f" stroke-width="9"/>' +
+              '<circle cx="390" cy="62" r="4"/><circle cx="398" cy="62" r="4"/><circle cx="394" cy="69" r="4"/><circle cx="386" cy="69" r="4"/><circle cx="382" cy="62" r="4"/><circle cx="386" cy="55" r="4"/><circle cx="394" cy="55" r="4"/>' +
+              '<circle cx="406" cy="62" r="4"/><circle cx="404" cy="70" r="4"/><circle cx="398" cy="76" r="4"/><circle cx="390" cy="78" r="4"/><circle cx="382" cy="76" r="4"/><circle cx="376" cy="70" r="4"/><circle cx="374" cy="62" r="4"/><circle cx="376" cy="54" r="4"/><circle cx="382" cy="48" r="4"/><circle cx="390" cy="46" r="4"/><circle cx="398" cy="48" r="4"/><circle cx="404" cy="54" r="4"/></g>' +
+              '<text x="390" y="125" fill="#dceafb" font-size="13" text-anchor="middle" font-weight="700">Finomsodrott (-K/-F)</text><text x="390" y="143" fill="#7e8eac" font-size="10.5" text-anchor="middle">sok vékony elemi szál</text>' +
+              '</svg></div>' }
           ]
         },
         {
@@ -176,7 +189,7 @@ COURSE.addModule({
           type: 'single', q: 'Mit jelez a -K vagy -F betű az ér kialakításában?',
           options: [
             { t: 'Finomsodrott, nagyon hajlékony ér', correct: true },
-            { t: 'Tömör ér' }, { t: 'Alumínium vezető' }, { t: 'Gumi szigetelés' }
+            { t: 'Tömör, egyhuzalú merev ér' }, { t: 'Alumínium vezető anyag' }, { t: 'Gumi érszigetelés' }
           ],
           explain: 'A -K (finomsodrott, fix szereléshez) és -F (hajlékony, mozgóhoz) sok vékony szálból áll — nagyon hajlékony (MKH, MT, gumikábel).'
         },
@@ -188,7 +201,7 @@ COURSE.addModule({
           type: 'single', q: 'Milyen anyagból készülhet a vezető (ér)?',
           options: [
             { t: 'Rézből (Cu) vagy alumíniumból (Al)', correct: true },
-            { t: 'Kizárólag rézből' }, { t: 'Kizárólag alumíniumból' }, { t: 'Acélból' }
+            { t: 'Kizárólag rézből (Cu)' }, { t: 'Kizárólag alumíniumból (Al)' }, { t: 'Acélból vagy vasból' }
           ],
           explain: 'A vezető réz (Cu) vagy alumínium (Al) lehet. Ez is megjelenik a jelölésben (pl. NAYY: az A = alumínium).'
         }
@@ -242,6 +255,25 @@ COURSE.addModule({
                 { left: 'Zöld-sárga', right: 'Védővezető (PE) — kizárólag erre' },
                 { left: 'Barna', right: 'Fázis (L1)' },
                 { left: 'Szürke', right: 'Fázis (L3)' }
+              ]
+            },
+            { type: 'h3', text: 'Színezd be az NYM-J 5 erét a szabvány szerint!' },
+            {
+              type: 'coloring', gate: true,
+              intro: 'Koppints egy érre (a felirat a funkciója), majd válaszd ki a helyes szabványos színt a palettán.',
+              cores: [
+                { role: 'Fázis (L1)', correct: 'brown' },
+                { role: 'Fázis (L2)', correct: 'black' },
+                { role: 'Fázis (L3)', correct: 'grey' },
+                { role: 'Nulla (N)', correct: 'blue' },
+                { role: 'Védő (PE)', correct: 'pe' }
+              ],
+              palette: [
+                { id: 'brown', label: 'barna', css: '#6f421f' },
+                { id: 'black', label: 'fekete', css: '#1b1b1b' },
+                { id: 'grey', label: 'szürke', css: '#9aa1a8' },
+                { id: 'blue', label: 'kék', css: '#1f6fd0' },
+                { id: 'pe', label: 'zöld-sárga', css: 'repeating-linear-gradient(45deg,#1f9d3f 0 6px,#f2d21a 6px 12px)' }
               ]
             }
           ]

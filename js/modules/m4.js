@@ -116,7 +116,7 @@ COURSE.addModule({
         }
       ],
       quiz: [
-        { type: 'single', q: 'Mi a H05V-K fő szerepe?', options: [{ t: 'jel- és vezérlőkörök, készülék-összekötés, szekrényhuzalozás', correct: true }, { t: 'földkábel a kertbe' }, { t: 'kültéri hosszabbító' }, { t: 'ház betáp' }], explain: 'A H05V-K finomsodrott, 300/500 V — jeltovábbító és belső huzalozási körökhöz.' },
+        { type: 'single', q: 'Mi a H05V-K fő szerepe?', options: [{ t: 'jelkörök és szekrény-huzalozás', correct: true }, { t: 'földbe fektetett kerti betáp' }, { t: 'kültéri mozgó hosszabbító' }, { t: 'családi ház fő betáplálása' }], explain: 'A H05V-K finomsodrott, 300/500 V — jeltovábbító és belső huzalozási körökhöz.' },
         { type: 'single', q: 'Mennyi a H05V-K névleges feszültsége?', options: [{ t: '300/500 V', correct: true }, { t: '450/750 V' }, { t: '0,6/1 kV' }, { t: '300/300 V' }], explain: 'A H05V-K 300/500 V — a H07V-K (450/750 V) vékonyabb kistestvére.' },
         { type: 'tf', q: 'A H05V-K finomsodrott, ezért csavaros kötésbe érvéghüvely kell.', answer: true, explain: 'Igen, mint minden finomsodrott érnél.' }
       ]
@@ -170,7 +170,7 @@ COURSE.addModule({
         }
       ],
       quiz: [
-        { type: 'single', q: 'Mi az MKH tipikus felhasználása?', options: [{ t: 'elosztószekrény belső huzalozása, gépek, rázkódó helyek', correct: true }, { t: 'földbe fektetett betáp' }, { t: 'kültéri hosszabbító' }, { t: 'magas hőmérsékletű kazánbekötés' }], explain: 'Finomsodrott, hajlékony → szekrényhuzalozás, mozgó/rázkódó helyek.' },
+        { type: 'single', q: 'Mi az MKH tipikus felhasználása?', options: [{ t: 'szekrény-huzalozás, gépek, rázkódó helyek', correct: true }, { t: 'földbe fektetett kerti betáp' }, { t: 'kültéri mozgó hosszabbító' }, { t: 'magas hőmérsékletű kazánbekötés' }], explain: 'Finomsodrott, hajlékony → szekrényhuzalozás, mozgó/rázkódó helyek.' },
         { type: 'single', q: 'Csavaros kötésbe hogyan kötjük az MKH-t?', options: [{ t: 'érvéghüvellyel', correct: true }, { t: 'csupaszon, csavarral' }, { t: 'forrasztva mindig' }, { t: 'sehogy, tilos' }], explain: 'Érvéghüvellyel — különben a szálak szétnyomódnak, a kötés melegszik.' },
         { type: 'tf', q: 'Az MKH 450/750 V-os (H07V-K), a H05V-K-nál vastagabb testvér.', answer: true, explain: 'Igen: MKH = H07V-K, 450/750 V.' }
       ]
@@ -224,7 +224,7 @@ COURSE.addModule({
         }
       ],
       quiz: [
-        { type: 'single', q: 'Mire való az MT (H05VV-F)?', options: [{ t: 'beltéri hosszabbító, lámpa, háztartási gép bekötése', correct: true }, { t: 'földbe fektetés' }, { t: 'kültéri építkezés tápja' }, { t: 'ház betáp a mérőig' }], explain: 'Beltéri, kis-közepes terhelésű csatlakozóvezeték.' },
+        { type: 'single', q: 'Mire való az MT (H05VV-F)?', options: [{ t: 'beltéri hosszabbító, lámpa, kis gép', correct: true }, { t: 'tartós földbe fektetés' }, { t: 'kültéri építkezés tápja' }, { t: 'ház betáp a mérőig' }], explain: 'Beltéri, kis-közepes terhelésű csatlakozóvezeték.' },
         { type: 'tf', q: 'Az MT alkalmas közvetlen kültéri használatra.', answer: false, explain: 'Nem! Kültérre a GT (gumikábel) való; az MT beltéri.' },
         { type: 'single', q: 'Melyik az MT lapos zsinór-rokona?', options: [{ t: 'MTL (H03VVH2-F)', correct: true }, { t: 'NYY' }, { t: 'NAYY' }, { t: 'H07G-U' }], explain: 'Az MTL (H03VVH2-F) lapos zsinór lámpákhoz, kis készülékekhez.' }
       ]
@@ -283,7 +283,7 @@ COURSE.addModule({
       ],
       quiz: [
         { type: 'single', q: 'Miből készíts kültéri hosszabbítót?', options: [{ t: 'GT (H07RN-F) gumikábelből', correct: true }, { t: 'MT (H05VV-F) tömlővezetékből' }, { t: 'MCu vezetékből' }, { t: 'MM-fal vezetékből' }], explain: 'A GT UV-, ózon- és időjárásálló — kültéri hosszabbítóhoz ez való, nem az MT.' },
-        { type: 'single', q: 'Milyen a GT köpenye?', options: [{ t: 'fekete, strapabíró neoprén gumi', correct: true }, { t: 'fehér PVC' }, { t: 'szürke PVC' }, { t: 'nincs köpenye' }], explain: 'Gumi (neoprén) köpeny, fekete — innen a „gumikábel” név.' },
+        { type: 'single', q: 'Milyen a GT köpenye?', options: [{ t: 'fekete, strapabíró neoprén gumi', correct: true }, { t: 'fehér, sima PVC köpeny' }, { t: 'világosszürke PVC köpeny' }, { t: 'nincs külön köpenye' }], explain: 'Gumi (neoprén) köpeny, fekete — innen a „gumikábel” név.' },
         { type: 'tf', q: 'A GT alkalmas mozgó motor, daru, szivattyú bekötésére kültéren.', answer: true, explain: 'Igen, a H07RN-F épp ilyen ipari/kültéri mozgó alkalmazásokra való.' }
       ]
     },
@@ -331,12 +331,25 @@ COURSE.addModule({
                   { label: 'Gumiköpenyes kültéri mozgó kábel', why: 'Nem: az a GT. A H07G a magas hőmérséklethez, nem a mozgáshoz/kültérhez optimalizált.' }
                 ]
               }]
+            },
+            { type: 'h3', text: 'Igaz vagy hamis? — pörgesd végig a vezetékeket!' },
+            {
+              type: 'swipe', gate: true,
+              intro: 'Döntsd el minden állításról: igaz vagy hamis? A hibásak a végén visszajönnek, amíg mindet el nem találod.',
+              cards: [
+                { text: 'Az MCu köpeny nélküli vezeték, ezért falba védőcső kell köré.', answer: true },
+                { text: 'Az MT (H05VV-F) kültéri hosszabbítónak ideális, mert UV-álló.', answer: false, why: 'Az MT PVC köpenye nem UV-álló — kültérre a GT való.' },
+                { text: 'A GT gumikábel: UV-/időjárásálló, mozgó és kültéri gépekhez.', answer: true },
+                { text: 'A H07G PVC szigetelésű, kb. +70 °C-ig terhelhető.', answer: false, why: 'A H07G szilikongumi, +110 °C-ig hőálló.' },
+                { text: 'Finomsodrott (MKH, H05V-K) eret csavaros kötésbe érvéghüvellyel kötünk.', answer: true },
+                { text: 'Az MKH tömör, merev vezeték.', answer: false, why: 'Az MKH finomsodrott (sok elemi szál), nagyon hajlékony.' }
+              ]
             }
           ]
         }
       ],
       quiz: [
-        { type: 'single', q: 'Hol használjuk a H07G vezetéket?', options: [{ t: 'magas hőmérsékletű helyeken (kazán, szauna, fűtőtest, lámpatest)', correct: true }, { t: 'földbe fektetve' }, { t: 'kültéri hosszabbítóként' }, { t: 'gyengeáramú jelkábelként' }], explain: 'A szilikongumi szigetelés +110 °C-ig bírja — forró helyekre való.' },
+        { type: 'single', q: 'Hol használjuk a H07G vezetéket?', options: [{ t: 'magas hőmérsékletű helyeken (kazán, szauna)', correct: true }, { t: 'tartós földi fektetésben' }, { t: 'kültéri mozgó hosszabbítóként' }, { t: 'gyengeáramú jelkábelként' }], explain: 'A szilikongumi szigetelés +110 °C-ig bírja — forró helyekre való.' },
         { type: 'single', q: 'Meddig hőálló a H07G (rögzítve)?', options: [{ t: '+110 °C-ig', correct: true }, { t: '+70 °C-ig' }, { t: '+50 °C-ig' }, { t: '+200 °C-ig' }], explain: 'Rögzítve −40…+110 °C, mozgatva −25…+110 °C.' },
         { type: 'tf', q: 'A H07G ott jó választás, ahol a PVC szigetelés már megolvadna.', answer: true, explain: 'Pontosan ez a lényege — hőálló szilikongumi.' }
       ]

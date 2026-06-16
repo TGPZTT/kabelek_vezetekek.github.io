@@ -120,8 +120,8 @@ COURSE.addModule({
       quiz: [
         {
           type: 'single', q: 'Mit jelent a B betű az MBCu jelölésben?',
-          options: [{ t: 'Burkolt = van külső köpeny', correct: true }, { t: 'Barna ér' }, { t: 'Bevont alumínium' }, { t: 'Beltéri' }],
-          explain: 'B = Burkolt, azaz van külső köpeny — ezért vakolható falba. MBCu = NYM-J.'
+          options: [{ t: 'Burkolt (van külső köpeny)', correct: true }, { t: 'Barna érszigetelés' }, { t: 'Bevont alumínium vezető' }, { t: 'Beltéri kivitel' }],
+          explain: 'B = Burkolt, azaz van külső köpeny → köpenyes kábel. MBCu = NYM-J.'
         },
         {
           type: 'single', q: 'Melyik a LAPOS, fehér, vakolat alá való fal-KÁBEL?',
@@ -130,8 +130,8 @@ COURSE.addModule({
         },
         {
           type: 'single', q: 'Mit kódol a KH a magyar jelölésben (pl. MKH)?',
-          options: [{ t: 'Különösen Hajlékony (finomsodrott) ér', correct: true }, { t: 'Köpeny + ház' }, { t: 'Kis Hőmérséklet' }, { t: 'Kettős Hüvely' }],
-          explain: 'KH = Különösen Hajlékony, finomsodrott ér. MKH = H07V-K.'
+          options: [{ t: 'Különösen Hajlékony (finomsodrott) ér', correct: true }, { t: 'Köpeny és ház védelem' }, { t: 'Kis hőmérsékletű kivitel' }, { t: 'Kettős fémhüvely az éren' }],
+          explain: 'KH = Különösen Hajlékony, finomsodrott (sok elemi szálú) ér. MKH = H07V-K.'
         },
         {
           type: 'multi', q: 'Mely betűk jelentését kötötted helyesen? (több is)',
@@ -167,6 +167,20 @@ COURSE.addModule({
                 ['6. vezető (kötőjel után)', '-U / -R / -K / -F / -H', 'U = tömör · R = sodrott · K = finomsodrott (fix) · F = hajlékony (mozgó) · H = legfinomabb'],
                 ['7. erek × mm²', 'pl. 3G1,5 / 3×2,5', 'G = van zöld-sárga ér · × = nincs zöld-sárga ér']
               ]
+            },
+            { type: 'h3', text: 'Építsd fel a kódot pozíciónként! (interaktív)' },
+            {
+              type: 'codebuilder', gate: true,
+              intro: 'Egy kábelt így írnak le: <strong>harmonizált</strong> típus, <strong>300/500 V</strong>, <strong>PVC</strong> érszigetelés, fölötte <strong>PVC köpeny</strong> is, <strong>hajlékony</strong> (mozgatható) erek, <strong>3 ér</strong>, és <strong>van benne zöld-sárga</strong> védőér. Alakítsd a tulajdonságokat kódszimbólumokká — a célkódot NEM áruljuk el! (A táblázat/Puska segít a megfeleltetésben.)',
+              slots: [
+                { label: '1. szabvány', correct: 'H', options: ['H', 'A', 'N'] },
+                { label: '2. feszültség', correct: '05', options: ['03', '05', '07'] },
+                { label: '3. érszigetelés', correct: 'V', options: ['V', 'R', 'N', 'Z'] },
+                { label: '4. köpeny', correct: 'V', options: ['V', 'R', 'N', '—'] },
+                { label: '5. vezető', correct: '-F', options: ['-U', '-R', '-K', '-F'] },
+                { label: '6. erek', correct: '3G1,5', options: ['3G1,5', '3×1,5'] }
+              ],
+              result: 'Az összerakott kód: <code>H05VV-F 3G1,5</code> = <strong>MT</strong> tömlővezeték. (A 3<strong>G</strong>1,5 jelzi a zöld-sárga eret.)'
             }
           ]
         },
@@ -185,6 +199,28 @@ COURSE.addModule({
                 { glyph: '3G1,5', label: '3 ér, van zöld-sárga', html: 'G = tartalmaz zöld-sárga védőeret; 3 × 1,5 mm².' }
               ],
               result: '<code>H05VV-F 3G1,5</code> = <strong>MT</strong> tömlővezeték.'
+            },
+            { type: 'h3', text: 'Még két kód — fejtsd meg ezeket is!' },
+            {
+              type: 'decoder', gate: true, code: 'H07V-U', title: 'Fejtsd meg: ',
+              parts: [
+                { glyph: 'H', label: 'Harmonizált', html: 'európai típus.' },
+                { glyph: '07', label: '450/750 V', html: 'névleges feszültség.' },
+                { glyph: 'V', label: 'PVC szigetelés', html: 'érszigetelés; nincs 4. anyagjel → nincs köpeny.' },
+                { glyph: '-U', label: 'Tömör vezető', html: 'egyhuzalú, merev.' }
+              ],
+              result: '<code>H07V-U</code> = <strong>MCu</strong> — tömör rézvezeték köpeny nélkül (csőbe).'
+            },
+            {
+              type: 'decoder', gate: true, code: 'H07RN-F', title: 'Fejtsd meg: ',
+              parts: [
+                { glyph: 'H', label: 'Harmonizált', html: 'európai típus.' },
+                { glyph: '07', label: '450/750 V', html: 'névleges feszültség.' },
+                { glyph: 'R', label: 'Gumi szigetelés', html: '3. pozíció: gumi érszigetelés.' },
+                { glyph: 'N', label: 'Neoprén köpeny', html: '4. pozíció: strapabíró gumiköpeny.' },
+                { glyph: '-F', label: 'Hajlékony', html: 'finomsodrott, mozgó alkalmazáshoz.' }
+              ],
+              result: '<code>H07RN-F</code> = <strong>GT</strong> gumikábel — kültér, mozgó gép.'
             }
           ]
         },
@@ -271,6 +307,19 @@ COURSE.addModule({
                 ['<code>0,6/1 kV</code>', 'névleges feszültség (fázis–föld / fázis–fázis)', 'a földkábelek (NYY, NAYY) 1 kV-osak'],
                 ['<code>n×mm²</code>', 'erek száma × keresztmetszet', 'pl. <code>3×1,5</code> = 3 ér, egyenként 1,5 mm² · <code>5×2,5</code> = 5 ér × 2,5 mm²']
               ]
+            },
+            { type: 'h3', text: 'Építsd fel a VDE-kódot pozíciónként! (interaktív)' },
+            {
+              type: 'codebuilder', gate: true,
+              intro: 'Egy kábelt így írnak le: <strong>VDE</strong> szabványos típus, <strong>PVC</strong> szigetelés, <strong>köpenyes</strong> szerelvénykábel, <strong>réz</strong> vezető, <strong>3 ér</strong>, és <strong>van benne zöld-sárga</strong> védőér. Alakítsd a tulajdonságokat VDE-kódszimbólumokká — a célkódot NEM áruljuk el! Figyelj: a VDE-nél a zöld-sárgát a -J jelzi (nem G).',
+              slots: [
+                { label: '1. szabvány', correct: 'N', options: ['N', 'H', 'A'] },
+                { label: '2. szigetelés', correct: 'Y', options: ['Y', 'G', 'R'] },
+                { label: '3. kivitel', correct: 'M', options: ['M', 'C', 'CW'] },
+                { label: '4. védőér', correct: '-J', options: ['-J', '-O'] },
+                { label: '5. erek', correct: '3×1,5', options: ['3×1,5', '3G1,5'] }
+              ],
+              result: 'Az összerakott kód: <code>NYM-J 3×1,5</code> = <strong>MBCu</strong> (világosszürke szerelvénykábel).'
             }
           ]
         },
@@ -287,7 +336,7 @@ COURSE.addModule({
                 { glyph: '-J', label: 'Van zöld-sárga', html: 'tartalmaz védőeret (PE).' },
                 { glyph: '3×1,5', label: '3 ér × 1,5 mm²', html: 'érszám és keresztmetszet.' }
               ],
-              result: '<code>NYM-J 3×1,5</code> = az <strong>MBCu</strong> — KÖR, szürke szerelvénykábel.'
+              result: '<code>NYM-J 3×1,5</code> = az <strong>MBCu</strong> — KÖR, világosszürke szerelvénykábel.'
             }
           ]
         },
@@ -402,9 +451,22 @@ COURSE.addModule({
                 { front: 'MCu', back: '<b>H07V-U</b><br>tömör rézvezeték' },
                 { front: 'MKH', back: '<b>H07V-K</b><br>finomsodrott vezeték' },
                 { front: 'MT', back: '<b>H05VV-F</b><br>tömlővezeték' },
-                { front: 'MBCu', back: '<b>NYM-J</b><br>KÖR, szürke szerelvénykábel' },
+                { front: 'MBCu', back: '<b>NYM-J</b><br>KÖR, világosszürke szerelvénykábel' },
                 { front: 'GT', back: '<b>H07RN-F</b> / H05RR-F<br>gumikábel' },
-                { front: 'MM-fal', back: 'YDYt / NYIFY jelleg<br>LAPOS, fehér falvezeték' }
+                { front: 'MM-fal', back: '<b>lapos, fehér falKÁBEL</b><br>megfelelői: YDYt / NYIFY (külföldi lapos installációs kábel)' }
+              ]
+            },
+            { type: 'h3', text: 'Memóriajáték — magyar ↔ szabványos párok' },
+            {
+              type: 'memory', gate: true,
+              intro: 'Fordíts fel két lapot; ha összetartoznak (magyar név ↔ szabványos jel), nyitva maradnak. Találd meg mind a hat párt!',
+              pairs: [
+                { a: 'MCu', b: 'H07V-U' },
+                { a: 'MKH', b: 'H07V-K' },
+                { a: 'MT', b: 'H05VV-F' },
+                { a: 'MBCu', b: 'NYM-J' },
+                { a: 'GT', b: 'H07RN-F' },
+                { a: 'NAYY', b: 'alu földkábel' }
               ]
             }
           ]
@@ -430,7 +492,7 @@ COURSE.addModule({
         {
           type: 'text', q: 'Írd be a MBCu nemzetközi (VDE) megfelelőjét! (N-nel kezdődik, kötőjellel)',
           accept: ['NYM-J', 'NYMJ', 'NYM'],
-          explain: 'MBCu = NYM-J — a KÖR keresztmetszetű, szürke szerelvénykábel.'
+          explain: 'MBCu = NYM-J — a KÖR keresztmetszetű, világosszürke szerelvénykábel.'
         }
       ]
     }
@@ -438,8 +500,8 @@ COURSE.addModule({
 
   /* ---------------- MODULKVÍZ ---------------- */
   quiz: [
-    { type: 'single', q: 'Hány jelölésrendszer él párhuzamosan ugyanarra a termékre Magyarországon?', options: [{ t: 'Három (magyar MSZ, harmonizált CENELEC, német VDE)', correct: true }, { t: 'Egy' }, { t: 'Kettő' }, { t: 'Négy' }], explain: 'Magyar (MSZ), harmonizált (CENELEC/HD 361) és német (VDE) — három rendszer.' },
-    { type: 'single', q: 'MBCu = ?', options: [{ t: 'NYM-J', correct: true }, { t: 'H07V-U' }, { t: 'NYY-J' }, { t: 'NAYY' }], explain: 'MBCu = NYM-J, a KÖR, szürke szerelvénykábel.' },
+    { type: 'single', q: 'Hány jelölésrendszer él párhuzamosan ugyanarra a termékre Magyarországon?', options: [{ t: 'Három', correct: true }, { t: 'Egy' }, { t: 'Kettő' }, { t: 'Négy' }], explain: 'Három: magyar (MSZ), harmonizált (CENELEC/HD 361) és német (VDE).' },
+    { type: 'single', q: 'MBCu = ?', options: [{ t: 'NYM-J', correct: true }, { t: 'H07V-U' }, { t: 'NYY-J' }, { t: 'NAYY' }], explain: 'MBCu = NYM-J, a KÖR, világosszürke szerelvénykábel.' },
     { type: 'single', q: 'A harmonizált kódban a 3. pozíció (pl. H05VV-F első V-je) mit ad meg?', options: [{ t: 'az érszigetelés anyagát', correct: true }, { t: 'a köpeny anyagát' }, { t: 'a feszültséget' }, { t: 'az erek számát' }], explain: 'A 3. pozíció az ÉRSZIGETELÉS anyaga (V=PVC…). A KÖPENY anyaga a 4. pozíció — ugyanaz a betűkészlet, ezért könnyű összekeverni! H05VV-F: 1. V = érszigetelés, 2. V = köpeny.' },
     { type: 'single', q: 'NYCWY 3×25/16 — a /16 micsoda?', options: [{ t: 'a koncentrikus vezető keresztmetszete', correct: true }, { t: 'a kábel hossza' }, { t: 'a feszültség' }, { t: 'az erek száma' }], explain: 'A koncentrikus (hullámos) vezető keresztmetszete 16 mm².' },
     { type: 'single', q: 'H07V-K = ?', options: [{ t: 'MKH', correct: true }, { t: 'MCu' }, { t: 'MT' }, { t: 'GT' }], explain: 'H07V-K (finomsodrott) = MKH.' },

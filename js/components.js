@@ -324,5 +324,230 @@ window.Components = (function () {
     return wrap;
   }
 
-  return { decoder: decoder, xsec: xsec, match: match, order: order, scenario: scenario, flashcards: flashcards, sort: sort };
+  /* ---------- KÓD-ÖSSZERAKÓ (codebuilder) — pozíciónként építsd fel a jelölést ---------- */
+  function codebuilder(b, onDone) {
+    var fire = once(onDone);
+    var wrap = el('div', 'codeb');
+    if (b.h) wrap.appendChild(html('<h3>' + b.h + '</h3>'));
+    if (b.intro) wrap.appendChild(html('<p>' + b.intro + '</p>'));
+    var disp = el('div', 'cb-display');
+    var slotsWrap = el('div', 'cb-slots');
+    var total = b.slots.length, solved = 0, chosen = new Array(total).fill(null);
+    function renderDisp() {
+      disp.innerHTML = b.slots.map(function (s, i) { return '<span class="cb-tok' + (chosen[i] ? ' set' : '') + '">' + (chosen[i] || '·') + '</span>'; }).join('');
+    }
+    b.slots.forEach(function (s, i) {
+      var row = el('div', 'cb-row');
+      row.innerHTML = '<div class="cb-lab">' + s.label + (s.hint ? ' <span class="cb-hint">(' + s.hint + ')</span>' : '') + '</div>';
+      var opts = el('div', 'cb-opts');
+      shuffle(s.options.slice()).forEach(function (o) {
+        var c = el('button', 'cb-opt'); c.textContent = o;
+        c.addEventListener('click', function () {
+          if (c.disabled) return;
+          if (o === s.correct) {
+            c.classList.add('ok'); chosen[i] = o; renderDisp();
+            opts.querySelectorAll('.cb-opt').forEach(function (x) { x.disabled = true; });
+            solved++;
+            if (solved === total) {
+              disp.classList.add('done');
+              wrap.appendChild(html('<div class="dc-result show" style="opacity:1">' + I('sparkles', 16, 'style="vertical-align:-3px"') + ' ' + b.result + '</div>'));
+              fire();
+            }
+          } else {
+            c.classList.add('bad'); setTimeout(function () { c.classList.remove('bad'); }, 450);
+            if (window.APP) APP.toast(I('x', 14) + ' Nem ez áll ezen a helyen — nézd a táblázatot vagy a puskát!');
+          }
+        });
+        opts.appendChild(c);
+      });
+      row.appendChild(opts); slotsWrap.appendChild(row);
+    });
+    renderDisp();
+    wrap.appendChild(disp); wrap.appendChild(slotsWrap);
+    return wrap;
+  }
+
+  /* ---------- SZÍNEZD BE AZ EREKET (coloring) ---------- */
+  function coloring(b, onDone) {
+    var fire = once(onDone);
+    var wrap = el('div', 'colorx');
+    if (b.h) wrap.appendChild(html('<h3>' + b.h + '</h3>'));
+    if (b.intro) wrap.appendChild(html('<p>' + b.intro + '</p>'));
+    var coresWrap = el('div', 'cx-cores'), palette = el('div', 'cx-palette');
+    var sel = null, done = 0, total = b.cores.length;
+    b.cores.forEach(function (c) {
+      var core = el('div', 'cx-core');
+      core.innerHTML = '<div class="cx-disk"></div><div class="cx-role">' + c.role + '</div>';
+      core.addEventListener('click', function () {
+        if (core.classList.contains('ok')) return;
+        Array.prototype.forEach.call(coresWrap.querySelectorAll('.cx-core.sel'), function (x) { x.classList.remove('sel'); });
+        core.classList.add('sel'); sel = { core: core, c: c };
+      });
+      coresWrap.appendChild(core);
+    });
+    b.palette.forEach(function (p) {
+      var sw = el('button', 'cx-sw'); sw.innerHTML = '<i style="background:' + p.css + '"></i>' + p.label;
+      sw.addEventListener('click', function () {
+        if (!sel) { if (window.APP) APP.toast('Előbb koppints egy érre!'); return; }
+        if (p.id === sel.c.correct) {
+          sel.core.querySelector('.cx-disk').style.background = p.css;
+          sel.core.classList.add('ok'); sel.core.classList.remove('sel'); sel = null;
+          done++; if (done === total) { wrap.appendChild(doneNote()); fire(); }
+        } else { var bc = sel.core; bc.classList.add('bad'); setTimeout(function () { bc.classList.remove('bad'); }, 450); if (window.APP) APP.toast(I('x', 14) + ' Nem ez a szín — nézd a színkódot/Puskát!'); }
+      });
+      palette.appendChild(sw);
+    });
+    wrap.appendChild(coresWrap);
+    wrap.appendChild(html('<div class="cx-hint">Koppints egy érre, majd a helyes színre a palettán.</div>'));
+    wrap.appendChild(palette);
+    return wrap;
+  }
+
+  /* ---------- MEMÓRIA-PÁROK (memory) ---------- */
+  function memory(b, onDone) {
+    var fire = once(onDone);
+    var wrap = el('div', 'memx');
+    if (b.h) wrap.appendChild(html('<h3>' + b.h + '</h3>'));
+    if (b.intro) wrap.appendChild(html('<p>' + b.intro + '</p>'));
+    var deck = []; b.pairs.forEach(function (p, i) { deck.push({ pid: i, t: p.a }); deck.push({ pid: i, t: p.b }); });
+    shuffle(deck);
+    var grid = el('div', 'mem-grid'), first = null, lock = false, matched = 0, total = b.pairs.length;
+    deck.forEach(function (card) {
+      var cd = el('div', 'mem-card');
+      cd.innerHTML = '<div class="mem-inner"><div class="mem-face mem-back">' + I('atom', 18) + '</div><div class="mem-face mem-front">' + card.t + '</div></div>';
+      cd.addEventListener('click', function () {
+        if (lock || cd.classList.contains('flip') || cd.classList.contains('matched')) return;
+        cd.classList.add('flip');
+        if (!first) { first = { el: cd, pid: card.pid }; return; }
+        if (first.pid === card.pid && first.el !== cd) {
+          cd.classList.add('matched'); first.el.classList.add('matched'); first = null;
+          matched++; if (matched === total) { wrap.appendChild(doneNote()); fire(); }
+        } else { lock = true; var f = first; first = null; setTimeout(function () { cd.classList.remove('flip'); f.el.classList.remove('flip'); lock = false; }, 850); }
+      });
+      grid.appendChild(cd);
+    });
+    wrap.appendChild(grid);
+    return wrap;
+  }
+
+  /* ---------- DÖNTÉSI FA (tree) ---------- */
+  function tree(b, onDone) {
+    var fire = once(onDone);
+    var wrap = el('div', 'treex'), noted = false;
+    if (b.h) wrap.appendChild(html('<h3>' + b.h + '</h3>'));
+    if (b.intro) wrap.appendChild(html('<p>' + b.intro + '</p>'));
+    var stage = el('div', 'tree-stage'); wrap.appendChild(stage);
+    function node(id) {
+      var n = b.nodes[id]; stage.innerHTML = '';
+      stage.appendChild(html('<div class="tree-q">' + I('compass', 18, 'style="vertical-align:-3px;color:var(--cyan)"') + ' ' + n.q + '</div>'));
+      var opts = el('div', 'tree-opts');
+      n.options.forEach(function (o) {
+        var btn = el('button', 'tree-opt'); btn.innerHTML = o.label;
+        btn.addEventListener('click', function () { if (o.result) result(o.result); else node(o.go); });
+        opts.appendChild(btn);
+      });
+      stage.appendChild(opts);
+    }
+    function result(text) {
+      stage.innerHTML = '<div class="tree-result ok">' + I('checkCircle', 22, 'style="vertical-align:-4px"') + ' ' + text + '</div>';
+      var again = el('button', 'btn ghost'); again.innerHTML = I('refresh', 16) + ' Másik út kipróbálása';
+      again.addEventListener('click', function () { node(b.start); });
+      stage.appendChild(again);
+      if (!noted) { noted = true; wrap.appendChild(doneNote()); fire(); }
+    }
+    node(b.start);
+    return wrap;
+  }
+
+  /* ---------- IGAZ/HAMIS PÖRGETŐ (swipe) ---------- */
+  function swipe(b, onDone) {
+    var fire = once(onDone);
+    var wrap = el('div', 'swipex');
+    if (b.h) wrap.appendChild(html('<h3>' + b.h + '</h3>'));
+    if (b.intro) wrap.appendChild(html('<p>' + b.intro + '</p>'));
+    var queue = b.cards.slice(), idx = 0, solved = 0, total = b.cards.length;
+    var prog = el('div', 'swipe-prog'), stage = el('div', 'swipe-stage'), fb = el('div', 'swipe-fb'), ctrl = el('div', 'swipe-ctrl');
+    function draw() {
+      prog.textContent = solved + ' / ' + total + ' helyes';
+      if (solved >= total) { stage.innerHTML = '<div class="swipe-card sc-done">' + I('check', 26) + ' Kész!</div>'; ctrl.innerHTML = ''; fb.className = 'swipe-fb'; wrap.appendChild(doneNote()); fire(); return; }
+      var c = queue[idx]; stage.innerHTML = '<div class="swipe-card"><div class="sc-text">' + c.text + '</div></div>'; fb.className = 'swipe-fb';
+    }
+    function answer(val) {
+      if (solved >= total) return; var c = queue[idx];
+      if (val === c.answer) { solved++; idx++; fb.className = 'swipe-fb show ok'; fb.innerHTML = I('check', 14) + ' Helyes!'; setTimeout(draw, 520); }
+      else { fb.className = 'swipe-fb show no'; fb.innerHTML = '<b>' + I('x', 14) + ' Nem.</b> ' + (c.why || 'Gondold át újra!'); queue.push(c); idx++; setTimeout(draw, 1500); }
+    }
+    var bF = el('button', 'btn gold'); bF.innerHTML = I('x', 16) + ' Hamis'; bF.addEventListener('click', function () { answer(false); });
+    var bT = el('button', 'btn primary'); bT.innerHTML = I('check', 16) + ' Igaz'; bT.addEventListener('click', function () { answer(true); });
+    ctrl.appendChild(bF); ctrl.appendChild(bT);
+    wrap.appendChild(prog); wrap.appendChild(stage); wrap.appendChild(fb); wrap.appendChild(ctrl);
+    draw();
+    return wrap;
+  }
+
+  /* ---------- KÁBELÉPÍTŐ (builder) — belülről kifelé ---------- */
+  function builder(b, onDone) {
+    var fire = once(onDone);
+    var wrap = el('div', 'buildx');
+    if (b.h) wrap.appendChild(html('<h3>' + b.h + '</h3>'));
+    if (b.intro) wrap.appendChild(html('<p>' + b.intro + '</p>'));
+    var diagram = el('div', 'build-diagram'), chipsWrap = el('div', 'build-chips');
+    var placed = 0, total = b.layers.length;
+    function redraw() {
+      var svg = '<svg viewBox="0 0 160 160" width="150" height="150">';
+      for (var k = placed - 1; k >= 0; k--) { var rad = 14 + (k + 1) * (62 / total); svg += '<circle cx="80" cy="80" r="' + rad + '" fill="' + b.layers[k].css + '" stroke="rgba(0,0,0,.35)" stroke-width="1"/>'; }
+      if (placed === 0) svg += '<circle cx="80" cy="80" r="60" fill="none" stroke="var(--line-strong)" stroke-dasharray="4 4"/><text x="80" y="84" text-anchor="middle" fill="#7e8eac" font-size="11">építsd fel!</text>';
+      svg += '</svg>'; diagram.innerHTML = svg;
+    }
+    shuffle(b.layers.map(function (l, i) { return { i: i, l: l }; })).forEach(function (c) {
+      var chip = el('button', 'build-chip'); chip.innerHTML = '<i style="background:' + c.l.css + '"></i>' + c.l.name;
+      chip.addEventListener('click', function () {
+        if (chip.disabled) return;
+        if (c.i === placed) { chip.classList.add('used'); chip.disabled = true; placed++; redraw(); if (placed === total) { wrap.appendChild(doneNote()); fire(); } }
+        else { chip.classList.add('bad'); setTimeout(function () { chip.classList.remove('bad'); }, 450); if (window.APP) APP.toast(I('x', 14) + ' Nem ez a következő réteg — belülről kifelé!'); }
+      });
+      chipsWrap.appendChild(chip);
+    });
+    redraw();
+    wrap.appendChild(diagram);
+    wrap.appendChild(html('<div class="cx-hint">Belülről kifelé: koppints a rétegekre a helyes sorrendben (vezető → … → köpeny).</div>'));
+    wrap.appendChild(chipsWrap);
+    return wrap;
+  }
+
+  /* ---------- MÉRETEZŐ CSÚSZKA (slider) ---------- */
+  function slider(b, onDone) {
+    var fire = once(onDone);
+    var wrap = el('div', 'sliderx');
+    if (b.h) wrap.appendChild(html('<h3>' + b.h + '</h3>'));
+    if (b.intro) wrap.appendChild(html('<p>' + b.intro + '</p>'));
+    var items = b.items, idx = 0, total = items.length;
+    var promptEl = el('div', 'sl-prompt'), valEl = el('div', 'sl-val'), statusEl = el('div', 'sl-status'), nextWrap = el('div', 'sl-next');
+    var input = el('input', 'sl-range'); input.type = 'range'; input.min = '0'; input.max = '' + (b.steps.length - 1); input.step = '1'; input.value = '0';
+    function update() {
+      var v = parseInt(input.value, 10), it = items[idx]; valEl.textContent = b.steps[v].label;
+      if (v < it.correct) { statusEl.className = 'sl-status low'; statusEl.innerHTML = I('flame', 14) + ' Túl kicsi — túlterhelődne, tűzveszély!'; }
+      else if (v > it.correct) { statusEl.className = 'sl-status high'; statusEl.innerHTML = I('info', 14) + ' Túlméretezett — működik, de fölöslegesen drága.'; }
+      else {
+        statusEl.className = 'sl-status ok'; statusEl.innerHTML = I('check', 14) + ' Megfelelő méret!';
+        if (!it._done) {
+          it._done = true;
+          var nb = el('button', 'btn primary'); nb.innerHTML = (idx < total - 1 ? 'Következő ' + I('arrowR', 16) : 'Kész ' + I('check', 16));
+          nb.addEventListener('click', function () { if (idx < total - 1) { idx++; drawItem(); } else { wrap.appendChild(doneNote()); fire(); nb.disabled = true; } });
+          nextWrap.innerHTML = ''; nextWrap.appendChild(nb);
+        }
+      }
+    }
+    function drawItem() { var it = items[idx]; input.value = '0'; promptEl.innerHTML = I('ruler', 16, 'style="vertical-align:-3px;color:var(--cyan)"') + ' <b>' + it.prompt + '</b>'; nextWrap.innerHTML = ''; update(); }
+    input.addEventListener('input', update);
+    var tw = el('div', 'sl-track'); tw.appendChild(valEl); tw.appendChild(input);
+    wrap.appendChild(promptEl); wrap.appendChild(tw); wrap.appendChild(statusEl); wrap.appendChild(nextWrap);
+    drawItem();
+    return wrap;
+  }
+
+  return {
+    decoder: decoder, xsec: xsec, match: match, order: order, scenario: scenario, flashcards: flashcards,
+    sort: sort, codebuilder: codebuilder, coloring: coloring, memory: memory, tree: tree, swipe: swipe, builder: builder, slider: slider
+  };
 })();

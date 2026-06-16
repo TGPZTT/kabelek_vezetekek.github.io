@@ -154,7 +154,7 @@
         var sCol = spec.sheath;
         if (kind === 'flat') {
           var rowW = Math.abs(positions[0].x) * 2 + rc * 2;
-          var shp = roundedRectShape(rowW + 0.5, rc * 2 + 0.45, (rc + 0.22));
+          var shp = roundedRectShape(rowW + 0.4, rc * 2 + 0.3, 0.3); // valódi LAPOS szalag (kis lekerekítés, nem ovális/stadion)
           var fg = new THREE.ExtrudeGeometry(shp, { depth: L(zSheath), bevelEnabled: false, curveSegments: 24 });
           var fm = mat(sCol, 0.62, 0.06);
           var sh = new THREE.Mesh(fg, fm); sh.position.z = BZ.sheath; group.add(sh);
@@ -222,13 +222,21 @@
       group.scale.setScalar(s);
       group.rotation.x = -0.38; group.rotation.y = -0.55;
 
-      // kamera: a tényleges sugárhoz illesztve, bőséges margóval
-      var fitR = targetR * 1.0;
-      var dist = (fitR / Math.sin((camera.fov * Math.PI / 180) / 2)) * 1.18;
-      camera.position.set(0, dist * 0.18, dist);
-      camera.lookAt(0, 0, 0);
+      // kamera: BÁRMILYEN képarányhoz illeszt (a szűkebb irány a mérvadó), így kis/keskeny kijelzőn sem lóg ki, és középen marad
+      function fit() {
+        var ww = el.clientWidth || 360, hh = el.clientHeight || 340;
+        var aspect = ww / hh;
+        var vHalf = (camera.fov * Math.PI / 180) / 2;
+        var hHalf = Math.atan(Math.tan(vHalf) * aspect);
+        var lim = Math.min(vHalf, hHalf);            // a szűkebb látószög korlátoz
+        var dist = (targetR / Math.sin(lim)) * 1.16; // margó
+        camera.aspect = aspect; camera.updateProjectionMatrix();
+        camera.position.set(0, dist * 0.15, dist);
+        camera.lookAt(0, 0, 0);
+      }
+      fit();
 
-      return { scene: scene, camera: camera, renderer: renderer, group: group, el: el };
+      return { scene: scene, camera: camera, renderer: renderer, group: group, el: el, fit: fit };
     }
 
     function mount(el, spec) {
@@ -260,7 +268,7 @@
           c.renderer.render(c.scene, c.camera);
         }
         loop();
-        ctx.onResize = function () { var w = el.clientWidth || 360, hh = el.clientHeight || 340; c.camera.aspect = w / hh; c.camera.updateProjectionMatrix(); c.renderer.setSize(w, hh); };
+        ctx.onResize = function () { var w = el.clientWidth || 360, hh = el.clientHeight || 340; c.renderer.setSize(w, hh); if (c.fit) c.fit(); };
         window.addEventListener('resize', ctx.onResize);
         return ctx;
       } catch (err) { console.warn('CABLE3D fallback:', err); fallback(el, spec); return null; }

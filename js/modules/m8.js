@@ -127,7 +127,7 @@ COURSE.addModule({
         }
       ],
       quiz: [
-        { type: 'single', q: 'Mire épül a vezeték/kábel elhatárolás definíciója?', options: [{ t: 'IEC 60050-461 (a köpeny megléte)', correct: true }, { t: 'a gyártó hangulata' }, { t: 'a kábel ára' }, { t: 'a szín' }], explain: 'Az IEC 60050-461 a köpeny-alapú elhatárolást rögzíti.' },
+        { type: 'single', q: 'Mire épül a vezeték/kábel elhatárolás definíciója?', options: [{ t: 'IEC 60050-461 (a köpeny megléte)', correct: true }, { t: 'a gyártó saját besorolása' }, { t: 'a kábel ára és színe' }, { t: 'az erek száma a kötegben' }], explain: 'Az IEC 60050-461 a köpeny-alapú elhatárolást rögzíti.' },
         { type: 'tf', q: 'A tananyag oktatási célú; hálózati munkát csak szakképzett villanyszerelő végezhet.', answer: true, explain: 'Így van — a gyakorlati munka szakember és a szolgáltató előírásai szerint történik.' }
       ]
     }
@@ -148,9 +148,9 @@ COURSE.addModule({
 COURSE.setFinalExam([
   { type: 'single', q: 'Mi dönti el szerkezetileg, hogy vezeték vagy kábel?', options: [{ t: 'a külső köpeny megléte', correct: true }, { t: 'az erek száma' }, { t: 'a vezető anyaga' }, { t: 'a feszültség' }], explain: 'Egy szigetelőréteg → vezeték; érszigetelés + köpeny → kábel (IEC 60050-461).' },
   { type: 'single', q: 'MBCu betűnként?', options: [{ t: 'Műanyag + Burkolt (köpeny) + réz', correct: true }, { t: 'Merev + Bevont + réz' }, { t: 'Műanyag + Barna + Cu' }, { t: 'Mantel + Bel + Cu' }], explain: 'M=műanyag, B=burkolt (van köpeny), Cu=réz → NYM-J.' },
-  { type: 'single', q: 'H05VV-F — mit jelent a két V?', options: [{ t: 'PVC érszigetelés és PVC köpeny', correct: true }, { t: 'két fázis' }, { t: 'kétszeres feszültség' }, { t: 'két ér' }], explain: '3. poz. érszigetelés (V=PVC), 4. poz. köpeny (V=PVC).' },
-  { type: 'single', q: 'A kötőjel utáni -K a harmonizált kódban:', options: [{ t: 'finomsodrott (fix szereléshez)', correct: true }, { t: 'tömör' }, { t: 'köpeny' }, { t: 'kábel' }], explain: '-K finomsodrott (fix), -F hajlékony (mozgó), -U tömör, -R sodrott.' },
-  { type: 'single', q: 'NYCWY 3×25/16 — a /16:', options: [{ t: 'a koncentrikus (hullámos) vezető keresztmetszete', correct: true }, { t: 'a kábel hossza' }, { t: '16 ér' }, { t: 'a feszültség' }], explain: 'A / utáni szám a koncentrikus vezetőé.' },
+  { type: 'single', q: 'H05VV-F — mit jelent a két V?', options: [{ t: 'PVC érszigetelés és PVC köpeny', correct: true }, { t: 'a két fázisvezető anyaga' }, { t: 'kétszeres névleges feszültség' }, { t: 'két párhuzamos ér' }], explain: '3. poz. érszigetelés (V=PVC), 4. poz. köpeny (V=PVC).' },
+  { type: 'single', q: 'A kötőjel utáni -K a harmonizált kódban:', options: [{ t: 'finomsodrott (fix szereléshez)', correct: true }, { t: 'tömör, egyhuzalú vezető' }, { t: 'a köpeny anyaga' }, { t: 'a köpenyes kábel jele' }], explain: '-K finomsodrott (fix), -F hajlékony (mozgó), -U tömör, -R sodrott.' },
+  { type: 'single', q: 'NYCWY 3×25/16 — a /16:', options: [{ t: 'a koncentrikus vezető keresztmetszete', correct: true }, { t: 'a kábel teljes hossza' }, { t: 'az erek száma (16)' }, { t: 'a névleges feszültség' }], explain: 'A / utáni szám a koncentrikus vezetőé.' },
   { type: 'single', q: 'Melyik LAPOS, fehér kábel, vakolat alá?', options: [{ t: 'MM-fal (MMCu)', correct: true }, { t: 'MBCu (NYM-J)' }, { t: 'NYY-J' }, { t: 'GT' }], explain: 'MM-fal lapos+fehér; MBCu kör+világosszürke.' },
   { type: 'single', q: 'NYM-J köpeny színe?', options: [{ t: 'világosszürke (RAL 7035)', correct: true }, { t: 'fekete' }, { t: 'fehér' }, { t: 'kék' }], explain: 'Világosszürke (RAL 7035).' },
   { type: 'single', q: 'Kültéri, mozgatott gép tápja:', options: [{ t: 'GT (H07RN-F) gumikábel', correct: true }, { t: 'MT (H05VV-F)' }, { t: 'MCu' }, { t: 'MM-fal' }], explain: 'GT — UV-/időjárásálló, hajlékony. Az MT PVC köpenye kültéren ridegül.' },

@@ -57,6 +57,28 @@ COURSE.addModule({
                 { front: 'GT', back: '<b>kültérre</b><br>mozgó, UV-álló gumikábel' },
                 { front: 'NYY / NAYY', back: '<b>a földbe</b><br>réz / alumínium földkábel' }
               ]
+            },
+            { type: 'h3', text: 'Kábelválasztó döntési fa — kövesd a környezetet!' },
+            {
+              type: 'tree', gate: true,
+              intro: 'Lépésről lépésre szűkítsd a választást a környezet és a feladat alapján. Próbáld ki több úton is!',
+              start: 'env',
+              nodes: {
+                env: { q: 'Hol lesz a kábel?', options: [
+                  { label: 'Beltérben, falon/falban', go: 'wall' },
+                  { label: 'Kültéren / mozgó gépen', result: 'GT (H07RN-F) — UV-/időjárásálló gumikábel a kültéri, mozgatott alkalmazáshoz.' },
+                  { label: 'Földbe fektetve', go: 'ground' }
+                ] },
+                wall: { q: 'Hogyan a falban?', options: [
+                  { label: 'Vakolat alá, cső nélkül, lapos', result: 'MM-fal (MMCu) — lapos, fehér falkábel, sekély horonyba.' },
+                  { label: 'Falon kívül / csatornában, kör', result: 'MBCu = NYM-J — a leggyakoribb szerelvénykábel.' },
+                  { label: 'Védőcsőben, cserélhetően', result: 'MCu (H07V-U) — védőcsőben, később cserélhető.' }
+                ] },
+                ground: { q: 'Kell-e árnyékolás / fémvédelem?', options: [
+                  { label: 'Nem, sima eset', result: 'NYY-J (réz) vagy NAYY (alu betáp) — földkábel homokágyba, jelzőszalaggal.' },
+                  { label: 'Igen, árnyékolás is', result: 'NYCY — koncentrikus rézréteggel (árnyékolás + mechanikai védelem).' }
+                ] }
+              }
             }
           ]
         }
@@ -153,7 +175,7 @@ COURSE.addModule({
     { type: 'single', q: 'Lakásfelújítás, falba, később bővíthető/cserélhető legyen:', options: [{ t: 'MCu védőcsőben', correct: true }, { t: 'MM-fal vakolat alá' }, { t: 'MBCu vakolat alá' }, { t: 'NYY' }], explain: 'A védőcső + MCu utólag is cserélhető/bővíthető — a többi beépítve marad.' },
     { type: 'single', q: 'Beltéri hosszabbító kontra kültéri hosszabbító:', options: [{ t: 'beltér: MT · kültér: GT', correct: true }, { t: 'beltér: GT · kültér: MT' }, { t: 'mindkettő MM-fal' }, { t: 'mindkettő NYY' }], explain: 'MT beltérre, GT (UV-/időjárásálló gumi) kültérre.' },
     { type: 'single', q: 'Ház betáp a mérőig — ki dönt a típusról?', options: [{ t: 'a szolgáltató előírása', correct: true }, { t: 'a lakó ízlése' }, { t: 'a legolcsóbb bolt' }, { t: 'mindegy' }], explain: 'A betáp és a mérőhely a szolgáltató előírásai szerint készül (NAYY 4×16 / NYCWY stb.).' },
-    { type: 'single', q: 'Csengő, kaputelefon, termosztát jelvezetéke:', options: [{ t: 'gyengeáramú jelkábel / UTP — 230 V-ra tilos', correct: true }, { t: 'NYM-J 3×1,5' }, { t: 'GT' }, { t: 'NYY' }], explain: 'Gyengeáram; vékony jelkábel vagy UTP, az erősáramtól külön nyomvonalon.' },
+    { type: 'single', q: 'Csengő, kaputelefon, termosztát jelvezetéke:', options: [{ t: 'gyengeáramú jelkábel vagy UTP', correct: true }, { t: 'erősáramú NYM-J 3×1,5' }, { t: 'kültéri GT gumikábel' }, { t: 'NYY réz földkábel' }], explain: 'Gyengeáram; vékony jelkábel vagy UTP, az erősáramtól külön nyomvonalon. 230 V-ra tilos.' },
     { type: 'multi', q: 'Mely helyzetekben jó a GT? (több is)', options: [{ t: 'kültéri építkezés tápja', correct: true }, { t: 'mozgatott szivattyú/gép', correct: true }, { t: 'falba süllyesztett fix világítás' }, { t: 'tartós földi fektetés a kertben' }], explain: 'GT: kültér + mozgatás. Fix falba az MCu/MBCu, földbe az NYY való.' }
   ]
 });
