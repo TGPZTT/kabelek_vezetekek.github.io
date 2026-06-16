@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vezetékek és Kábelek — Interaktív Tananyag</title>
+<meta name="description" content="Villanyszerelési vezetékek és kábelek — interaktív, lépésenkénti tananyag 3D modellekkel, dekódolóval és kvízekkel.">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+  <div class="bg-aurora"></div>
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- FELSŐ SÁV / HUD -->
+  <header class="hud" id="hud">
+    <div class="brand" id="brandHome" title="Tartalom / navigáció megnyitása">
+      <div class="sigil" id="sigil"></div>
+      <div>
+        <b>Vezetékek és kábelek</b>
+        <span class="brand-sub">Tartalom megnyitása</span>
+      </div>
+    </div>
+    <div class="spacer"></div>
+
+    <div class="progress-mini" title="Teljes haladás">
+      <span id="progPct">0%</span>
+      <div class="bar"><i id="progBar"></i></div>
+    </div>
+
+    <div class="lvl-badge" id="lvlBadge" title="Szint és tapasztalat (XP)">
+      <div class="ring" id="lvlRing"><b id="lvlNum">1</b></div>
+      <div class="lvl-meta">
+        <small class="lvl-name" id="rankName">Tanonc</small>
+        <div class="xp-track"><i class="xp-fill" id="xpFill"></i></div>
+      </div>
+    </div>
+
+    <button class="icon-btn" id="badgesBtn" title="Jelvények"></button>
+    <button class="icon-btn" id="resetBtn" title="Haladás visszaállítása"></button>
+  </header>
+
+  <!-- FŐ TARTALOM -->
+  <main id="app"></main>
+
+  <!-- segéd rétegek -->
+  <div id="toasts"></div>
+  <canvas id="confetti"></canvas>
+  <div class="modal-back" id="modalBack"><div class="modal" id="modal"></div></div>
+
+  <!-- 3D motor (offline, helyi Three.js) -->
+  <script src="js/three.min.js"></script>
+  <script src="js/three-cable.js"></script>
+
+  <!-- ikonok + tartalom-konténer -->
+  <script src="js/icons.js"></script>
+  <script src="js/course.js"></script>
+
+  <!-- TARTALMI MODULOK (lépésenként bővül) -->
+  <script src="js/modules/m1.js"></script>
+  <script src="js/modules/m2.js"></script>
+  <script src="js/modules/m3.js"></script>
+  <script src="js/modules/m4.js"></script>
+  <script src="js/modules/m5.js"></script>
+  <script src="js/modules/m6.js"></script>
+  <script src="js/modules/m7.js"></script>
+  <script src="js/modules/m8.js"></script>
+
+  <!-- interaktív komponensek + motor -->
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
