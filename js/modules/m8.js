@@ -89,6 +89,21 @@ COURSE.addModule({
                   ]
                 }
               ]
+            },
+            { type: 'h3', text: 'Nagy igaz/hamis pörgető — az egész tananyagból!' },
+            {
+              type: 'swipe', gate: true,
+              intro: 'Vegyesen az egész anyagból. Döntsd el minden állításról: igaz vagy hamis? A hibásak a végén visszajönnek.',
+              cards: [
+                { text: 'A vezeték és a kábel közti különbség a külső köpeny megléte.', answer: true },
+                { text: 'Az MM-fal vezeték, mert nincs köpenye.', answer: false, why: 'Az MM-falnak van külső műanyag rétege (köpeny) → kábel.' },
+                { text: 'Az NYM (MBCu) köpenye világosszürke (RAL 7035).', answer: true },
+                { text: 'A zöld-sárga ér szükség esetén fázisnak is használható.', answer: false, why: 'A zöld-sárga KIZÁRÓLAG védővezető (PE) — soha más.' },
+                { text: 'A földkábelek (NYY, NAYY) névleges feszültsége 0,6/1 kV.', answer: true },
+                { text: 'A H05VV-F megfelelője az NAYY.', answer: false, why: 'H05VV-F = MT; az NAYY alumínium földkábel — két külön termék.' },
+                { text: '2,5 mm² réz dugaljkörhöz 16 A-es kismegszakító való.', answer: true },
+                { text: 'Az alumínium ugyanannyit bír, mint az azonos keresztmetszetű réz.', answer: false, why: 'Az alu ~61% vezetőképesség → kb. egy mérettel lejjebb számít.' }
+              ]
             }
           ]
         }

@@ -123,13 +123,13 @@ COURSE.addModule({
             },
             { type: 'h3', text: 'Építsd fel az MBCu (NYM-J) keresztmetszetét — belülről kifelé!' },
             {
-              type: 'builder', gate: true,
-              intro: 'Koppints a rétegekre a helyes sorrendben, a vezetőtől a köpenyig. Minden helyes lépésnél nő a kábel.',
+              type: 'builder', gate: true, cores: 3,
+              intro: 'Az MBCu (NYM-J) <strong>3 eres</strong>, KÖR keresztmetszetű kábel. Koppints a rétegekre belülről kifelé — figyeld, ahogy a <strong>három ér</strong> köré épül a kitöltés és a köpeny!',
               layers: [
-                { name: 'réz vezető', css: '#c8772f' },
-                { name: 'PVC érszigetelés', css: '#6f421f' },
-                { name: 'kitöltőanyag / övréteg', css: '#e9e3d4' },
-                { name: 'világosszürke PVC köpeny', css: '#cbd0cc' }
+                { name: 'réz vezető', css: '#c8772f', scope: 'core' },
+                { name: 'PVC érszigetelés', css: '#6f421f', scope: 'core' },
+                { name: 'kitöltőanyag / övréteg', css: '#e9e3d4', scope: 'cable' },
+                { name: 'világosszürke PVC köpeny', css: '#cbd0cc', scope: 'cable' }
               ]
             }
           ]

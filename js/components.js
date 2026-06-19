@@ -485,25 +485,44 @@ window.Components = (function () {
     return wrap;
   }
 
-  /* ---------- KÁBELÉPÍTŐ (builder) — belülről kifelé ---------- */
+  /* ---------- KÁBELÉPÍTŐ (builder) — belülről kifelé, valódi keresztmetszet ---------- */
   function builder(b, onDone) {
     var fire = once(onDone);
     var wrap = el('div', 'buildx');
     if (b.h) wrap.appendChild(html('<h3>' + b.h + '</h3>'));
     if (b.intro) wrap.appendChild(html('<p>' + b.intro + '</p>'));
     var diagram = el('div', 'build-diagram'), chipsWrap = el('div', 'build-chips');
-    var placed = 0, total = b.layers.length;
+    var layers = b.layers, total = layers.length, placed = 0;
+    var N = b.cores || 1;
+    // melyik réteg tartozik az egyes erekhez (core), és melyik a teljes kábel köré (cable)
+    var coreIdx = [], cableIdx = [];
+    layers.forEach(function (l, i) { if (l.scope === 'core') coreIdx.push(i); else cableIdx.push(i); });
+    if (coreIdx.length === 0) { coreIdx = layers.map(function (l, i) { return i; }); } // visszafelé kompatibilis: egyeres, koncentrikus
+    // geometria
+    var CX = 80, CY = 80, Rout = 62;
+    var Rbundle = Rout - cableIdx.length * 8;
+    var rCore = (N === 1) ? Rbundle : Rbundle / (1 + 1 / Math.sin(Math.PI / N));
+    var P = (N === 1) ? 0 : rCore / Math.sin(Math.PI / N);
+    var coreR = coreIdx.map(function (gi, k) { return rCore * Math.sqrt((k + 1) / coreIdx.length); }); // egyenlő területű gyűrűk
+    var cableR = cableIdx.map(function (gi, m) { return Rbundle + (Rout - Rbundle) * (m + 1) / cableIdx.length; });
+    var pos = [];
+    for (var ci = 0; ci < N; ci++) { var a = -Math.PI / 2 + ci * 2 * Math.PI / N; pos.push({ x: CX + (N === 1 ? 0 : P * Math.cos(a)), y: CY + (N === 1 ? 0 : P * Math.sin(a)) }); }
+    function disk(cx, cy, r, fill) { return '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="' + r.toFixed(1) + '" fill="' + fill + '" stroke="rgba(0,0,0,.35)" stroke-width="1"/>'; }
     function redraw() {
-      var svg = '<svg viewBox="0 0 160 160" width="150" height="150">';
-      for (var k = placed - 1; k >= 0; k--) { var rad = 14 + (k + 1) * (62 / total); svg += '<circle cx="80" cy="80" r="' + rad + '" fill="' + b.layers[k].css + '" stroke="rgba(0,0,0,.35)" stroke-width="1"/>'; }
-      if (placed === 0) svg += '<circle cx="80" cy="80" r="60" fill="none" stroke="var(--line-strong)" stroke-dasharray="4 4"/><text x="80" y="84" text-anchor="middle" fill="#7e8eac" font-size="11">építsd fel!</text>';
+      var svg = '<svg viewBox="0 0 160 160" width="150" height="150" role="img">';
+      if (placed === 0) {
+        svg += '<circle cx="80" cy="80" r="60" fill="none" stroke="var(--line-strong)" stroke-dasharray="4 4"/><text x="80" y="84" text-anchor="middle" fill="#7e8eac" font-size="11">építsd fel!</text>';
+      } else {
+        for (var m = cableIdx.length - 1; m >= 0; m--) { if (placed > cableIdx[m]) svg += disk(CX, CY, cableR[m], layers[cableIdx[m]].css); }
+        for (var p = 0; p < pos.length; p++) { for (var k = coreIdx.length - 1; k >= 0; k--) { if (placed > coreIdx[k]) svg += disk(pos[p].x, pos[p].y, coreR[k], layers[coreIdx[k]].css); } }
+      }
       svg += '</svg>'; diagram.innerHTML = svg;
     }
-    shuffle(b.layers.map(function (l, i) { return { i: i, l: l }; })).forEach(function (c) {
-      var chip = el('button', 'build-chip'); chip.innerHTML = '<i style="background:' + c.l.css + '"></i>' + c.l.name;
+    shuffle(layers.map(function (l, i) { return { i: i, l: l }; })).forEach(function (cobj) {
+      var chip = el('button', 'build-chip'); chip.innerHTML = '<i style="background:' + cobj.l.css + '"></i>' + cobj.l.name;
       chip.addEventListener('click', function () {
         if (chip.disabled) return;
-        if (c.i === placed) { chip.classList.add('used'); chip.disabled = true; placed++; redraw(); if (placed === total) { wrap.appendChild(doneNote()); fire(); } }
+        if (cobj.i === placed) { chip.classList.add('used'); chip.disabled = true; placed++; redraw(); if (placed === total) { wrap.appendChild(doneNote()); fire(); } }
         else { chip.classList.add('bad'); setTimeout(function () { chip.classList.remove('bad'); }, 450); if (window.APP) APP.toast(I('x', 14) + ' Nem ez a következő réteg — belülről kifelé!'); }
       });
       chipsWrap.appendChild(chip);
